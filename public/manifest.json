@@ -1,0 +1,14 @@
+{
+  "name": "Task Tracer",
+  "version": "1.0.0",
+  "manifest_version": 2,
+  "description": "A chrome extension that allows users to track time spent on tasks",
+  "permissions": ["storage"],
+  "browser_action": {
+    "default_popup": "popup.html"
+  },
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": false
+  }
+}
