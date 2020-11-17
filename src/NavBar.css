@@ -1,0 +1,40 @@
+.icon-btn-on {
+  width: 50px;
+  height: 50px;
+  border: #3A3A3A;
+  border-right: 1px solid #3A3A3A;
+  background-color: #FAF9F9;
+  float: left;
+}
+
+.icon-btn-off {
+  width: 50px;
+  height: 50px;
+  border: #3A3A3A;
+  border-right: 1px solid #FAF9F9;
+  background-color: #3A3A3A;
+  float: left;
+}
+
+
+.navbar {
+  width: 100%;
+  height: 50px;
+  display: block;
+  color: #FAF9F9;
+  background-color: #3A3A3A;
+}
+
+.tab-image-on {
+  width: 30px;
+  height: 30px;
+  padding: 10px;
+  display: block;
+}
+
+.tab-image-off {
+  width: 30px;
+  height: 30px;
+  padding: 10px;
+  filter: brightness(0) invert(1);
+}

@@ -6,10 +6,11 @@ import ConvertToClock from './CovertToClock'
 const PastTaskList = (props) => {
   return props.tasks.map((task, i) => {
     return (
-      <div key={i}>
-        <h1>Task: {task.taskName}</h1>
-        <h3>Time: {ConvertToClock(task.time)}</h3>
-        <p>Description: {task.description}</p>
+      <div key={i} className='taskContainer'>
+        <div>
+          <div className='taskNameHeading'>{task.taskName}</div>
+          <div className='timeHeading'>{ConvertToClock(task.time)}</div>
+        </div>
       </div>
     );
   }) 
@@ -17,11 +18,11 @@ const PastTaskList = (props) => {
 
 const PastTaskScreen = (props) => {
   return (
-    <div>
-      Past Tasks
-      <PastTaskList tasks={props.tasks}/>
+    <div className='main-content'>
+      <div className='titleHeader'>Past Tasks</div>
+      <PastTaskList tasks={props.tasks} />
     </div>
-  )
+  );
 }
 
 export default PastTaskScreen

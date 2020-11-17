@@ -3,6 +3,8 @@ import CurrTaskList from './CurrTaskList';
 import NewTaskForm from './NewTaskForm';
 import ConvertToClock from './CovertToClock'
 
+import "./index.css"
+import TotalTimeCard from './TotalTimeCard';
 
 
 const CurrTaskScreen = ({
@@ -59,18 +61,17 @@ const CurrTaskScreen = ({
 
     DeleteTask(taskID);
   };
-
+  let timeFormat = ConvertToClock(totalTime);
   return (
-    <div>
-      <h1>Today's Total Time: {ConvertToClock(totalTime)}</h1>
-      Current Task Screen
+    <div className='main-content'>
+      <TotalTimeCard timeFormat={timeFormat} />
+      <NewTaskForm AddNewTask={AddNewTask} />
       <CurrTaskList
         tasks={tasksList}
         PlayPauseTask={PlayPauseTask}
         DeleteTask={DeleteTask}
         FinishTask={FinishTask}
       />
-      <NewTaskForm AddNewTask={AddNewTask} />
     </div>
   );
 };

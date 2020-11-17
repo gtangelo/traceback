@@ -12,3 +12,72 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.main-content {
+  padding: 5px;
+}
+
+.titleHeader {
+  font-family: Roboto, Arial, Helvetica, sans-serif;
+  font-weight: 500;
+  font-size: 20px;
+  text-align: left;
+  border-bottom: 1px solid #282828;
+  height: 25px;
+  margin: 5px;
+  padding-bottom: 3px;
+  padding-left: 5px;
+}
+
+.timeHeader {
+  font-size: 40px;
+  margin-top: 0px;
+  height: 50px;
+  font-weight: bold;
+}
+
+
+.greyBox {
+  display: block;
+  background-color: #282828;
+  margin: 5px;
+  min-height: 200px;
+  padding: 5px;
+}
+
+.taskContainer {
+  padding: 2px;
+  display: grid;
+  grid-row-gap: 10px;
+  padding: 10px;
+  background-color: #282828;
+  margin-bottom: 10px;
+}
+
+.timeHeading {
+  text-align: right;
+  font-family: Roboto, Arial, Helvetica, sans-serif;
+  font-size: 24pt;
+  font-weight: bold;
+  color: #FAF9F9;
+  padding-right: 5px;
+  margin-top: -5px;
+}
+
+.taskNameHeading {
+  float: left;
+  font-family: Roboto, Arial, Helvetica, sans-serif;
+  font-size: 16pt;
+  color: #FAF9F9;
+  padding-right: 5px;
+  padding-top: 5px;
+}
+
+.tasksListContainer {
+  display: block;
+  margin: 5px;
+}
+
+.taskBtn {
+  margin: 10px;
+}

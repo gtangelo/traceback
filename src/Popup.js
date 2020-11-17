@@ -1,12 +1,9 @@
-import { Button } from '@material-ui/core';
 import { useState, useEffect } from 'react';
 import PastTaskScreen from './PastTaskScreen';
 import CurrTaskScreen from './CurrTaskScreen';
 import './Popup.css'
-
-
-const CURRENT_TASK_TAB = 'Current Task';
-const PAST_TASK_TAB = 'Past Task';
+import NavBar from './NavBar';
+import {CURRENT_TASK_TAB} from './globals'
 
 
 const Popup = () => {
@@ -40,17 +37,7 @@ const Popup = () => {
 
   return (
     <div className='Popup'>
-      <div>
-        <Button
-          variant='contained'
-          onClick={() => setCurrPage(CURRENT_TASK_TAB)}
-        >
-          Current Tasks
-        </Button>
-        <Button variant='contained' onClick={() => setCurrPage(PAST_TASK_TAB)}>
-          Past Tasks
-        </Button>
-      </div>
+      <NavBar setCurrPage={setCurrPage} currPage={currPage} />
       {currPage === CURRENT_TASK_TAB ? (
         <CurrTaskScreen
           tasksList={currTasksList}
