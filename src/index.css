@@ -1,4 +1,37 @@
+  
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
 body {
+  margin: 0px;
+}
+
+::-webkit-scrollbar{
+  -webkit-appearance: none;
+  width: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 5px;
+  background-color: rgba(0,0,0,.5); 
+}
+
+::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.2); 
+  border-radius: 5px;
+} 
+
+/* .App {
+  background: linear-gradient(90deg, rgba(170,241,255,1) 0%, rgba(74,74,210,1) 100%, rgba(2,0,36,1) 100%);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+} */
+
+/* body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
@@ -80,4 +113,4 @@ code {
 
 .taskBtn {
   margin: 10px;
-}
+} */

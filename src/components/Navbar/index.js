@@ -1,10 +1,10 @@
 import React from 'react'
-import { CURRENT_TASK_TAB, PAST_TASK_TAB } from './globals'
-import currTaskBtn from './images/timerIcon.png'
-import pastTaskBtn from './images/historyIcon.png';
-import './NavBar.css'
+import { CURRENT_TASK_TAB, PAST_TASK_TAB } from 'globals.js'
+import currTaskBtn from 'images/timerIcon.png'
+import pastTaskBtn from 'images/historyIcon.png';
+import './index.css'
 
-const NavBar = ({ currPage, setCurrPage }) => {
+const Navbar = ({ currPage, setCurrPage }) => {
   let currTab = "off";
   let pastTab = 'off';
   if (currPage === CURRENT_TASK_TAB) {
@@ -15,9 +15,9 @@ const NavBar = ({ currPage, setCurrPage }) => {
   }
 
   return (
-    <navbar className='navbar'>
+    <nav>
       <div
-        className={'icon-btn-' + currTab}
+        className={'nav-item-' + currTab}
         onClick={() => setCurrPage(CURRENT_TASK_TAB)}
       >
         <img
@@ -26,19 +26,19 @@ const NavBar = ({ currPage, setCurrPage }) => {
           alt='Current Tasks'
         />
       </div>
-
       <div
-        className={'icon-btn-' + pastTab}
+        className={'nav-item-' + pastTab}
         onClick={() => setCurrPage(PAST_TASK_TAB)}
       >
+        {' '}
         <img
           className={'tab-image-' + pastTab}
           src={pastTaskBtn}
           alt='Past Tasks'
         />
       </div>
-    </navbar>
+    </nav>
   );
 };
 
-export default NavBar;
+export default Navbar;

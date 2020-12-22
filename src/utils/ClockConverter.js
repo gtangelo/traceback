@@ -1,4 +1,4 @@
-const CovertToClock = (totalSeconds) => {
+const ClockConverter = (totalSeconds) => {
   let hours = Math.floor(totalSeconds / 3600);
   totalSeconds %= 3600;
   let minutes = Math.floor(totalSeconds / 60);
@@ -16,4 +16,4 @@ const CovertToClock = (totalSeconds) => {
   return `${hours} : ${minutes} : ${seconds}`;
 };
 
-export default CovertToClock
+export default ClockConverter;

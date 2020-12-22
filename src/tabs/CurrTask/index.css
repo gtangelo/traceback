@@ -1,0 +1,93 @@
+.tracking-navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.new-task-button {
+  width: 150px;
+  height: 35px;
+  background: linear-gradient(180deg, #BB6BD9 0%, #9144D8 100%);
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+}
+
+.tracking-section {
+  border-radius: 15px;
+  width: 100%;
+  height: 80px;
+  background: linear-gradient(180deg, #BB6BD9 0%, #9144D8 100%);
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 15px;
+  margin: 10px 0;
+}
+
+.tracking-task-list {
+  overflow: auto;
+  width: 180px;
+}
+
+.task-item-container {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.circle-button, .play-button {
+  width: 25px;
+  height: 25px;
+  border-radius: 25px;
+  background-color: #e0e0e0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.circle-button:hover, .play-button:hover, .new-task-button:hover {
+  cursor: pointer;
+}
+
+.button-img {
+  width: 13px;
+}
+
+.play-button {
+  width: 110px;
+  color: #333333;
+  padding: 0 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.buttons-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 185px;
+}
+
+.task-name-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 200px;
+}
+
+.task-colour {
+  width: 20px;
+  height: 20px;
+  border-radius: 20px;
+  background-color: #FEC122;
+}
+
+.task-name {
+  width: 160px;
+}

@@ -1,8 +1,41 @@
 .Popup {
   border: solid;
-  font-family: Arial, Helvetica, sans-serif;
-  font-size: 14px;
-  width: 400px;
-  min-height: 500px;
+  font-family: 'Roboto', sans-serif;
+  width: 500px;
+  height: 500px;
   background-color: #FAF9F9;
+  display: flex;
+}
+
+.tab-container {
+  width: 450px;
+  height: 100%;
+  padding: 15px 25px;
+  background-color: #333333;
+  color: #e0e0e0;
+  overflow: auto;
+}
+
+.sub-heading {
+  font-size: 20px;
+  color: #bdbdbd;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.heading {
+  font-size: 26px;
+  color: #bdbdbd;
+  margin-bottom: 10px;
+  font-weight: bolder;
+}
+
+.task-name {
+  font-weight: bold;
+  font-size: 15px;
+  letter-spacing: 1px;
+}
+
+.hidden {
+  display: none;
 }

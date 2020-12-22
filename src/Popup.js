@@ -1,16 +1,16 @@
 import { useState, useEffect } from 'react';
-import PastTaskScreen from './PastTaskScreen';
-import CurrTaskScreen from './CurrTaskScreen';
+import { CURRENT_TASK_TAB } from './globals';
+import Navbar from 'components/Navbar/';
+import PastTaskScreen from 'tabs/PastTask/';
+import CurrTaskScreen from 'tabs/CurrTask/';
 import './Popup.css'
-import NavBar from './NavBar';
-import {CURRENT_TASK_TAB} from './globals'
-
 
 const Popup = () => {
   const [currPage, setCurrPage] = useState(CURRENT_TASK_TAB);
   const [totalTime, setTotalTime] = useState(0);
   const [pastTasksList, setPastTasksList] = useState([]);
   const [currTasksList, setCurrTasksList] = useState([]);
+  const [labels, setLabels] = useState([])
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -37,7 +37,7 @@ const Popup = () => {
 
   return (
     <div className='Popup'>
-      <NavBar setCurrPage={setCurrPage} currPage={currPage} />
+      <Navbar setCurrPage={setCurrPage} currPage={currPage} />
       {currPage === CURRENT_TASK_TAB ? (
         <CurrTaskScreen
           tasksList={currTasksList}
@@ -46,10 +46,10 @@ const Popup = () => {
           totalTime={totalTime}
         />
       ) : (
-        <PastTaskScreen tasks={pastTasksList} />
+        <PastTaskScreen tasksList={pastTasksList} />
       )}
     </div>
   );
 }
 
-export default Popup
+export default Popup;
