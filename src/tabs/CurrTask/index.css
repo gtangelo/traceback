@@ -71,23 +71,22 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 185px;
+  width: 200px;
 }
 
 .task-name-container {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 200px;
+  width: 160px;
 }
 
 .task-colour {
   width: 20px;
   height: 20px;
   border-radius: 20px;
-  background-color: #FEC122;
 }
 
 .task-name {
-  width: 160px;
+  width: 130px;
 }

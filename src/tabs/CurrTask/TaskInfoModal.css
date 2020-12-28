@@ -1,0 +1,33 @@
+.task-title {
+  font-weight: bold;
+  font-size: 15px;
+  letter-spacing: 1px;
+  color: #333333;
+}
+
+.info-modal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  width: 400px;
+  height: 200px;
+  z-index: 1;
+  padding: 20px;
+}
+
+.task-info-container {
+  width: 100%;
+  color: #333333;
+  display: flex;
+  margin-bottom: 5px;
+}
+
+.task-info-heading {
+  width: 100px;
+}
+
+.task-info-content {
+
+}

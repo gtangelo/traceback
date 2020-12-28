@@ -1,8 +1,7 @@
 .Popup {
-  border: solid;
   font-family: 'Roboto', sans-serif;
   width: 500px;
-  height: 500px;
+  height: 350px;
   background-color: #FAF9F9;
   display: flex;
 }
