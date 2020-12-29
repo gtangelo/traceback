@@ -1,15 +1,19 @@
-import { useState, useEffect, useRef } from 'react';
-import { CURRENT_TASK_TAB, PAST_TASK_TAB, URL } from './globals';
-import Navbar from 'components/Navbar/';
-import PastTaskScreen from 'tabs/PastTask/';
-import CurrTaskScreen from 'tabs/CurrTask/';
-import './Popup.css'
-import useInterval from 'utils/useInterval';
-import updateTaskDatabase from 'utils/updateTaskDatabase';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import './axios'
+
+import useInterval from 'utils/hooks/useInterval';
+import updateTaskDatabase from 'utils/helpers/updateTaskDatabase';
+import { CURRENT_TASK_TAB, PAST_TASK_TAB } from 'utils/constants';
+
+import Navbar from 'components/Navbar/';
+import CurrTaskScreen from 'tabs/CurrTask/';
+import PastTaskScreen from 'tabs/PastTask/';
+
+import './Popup.css'
 
 const Popup = () => {
-  const [currPage, setCurrPage] = useState(CURRENT_TASK_TAB);
+  const [tab, setTab] = useState(CURRENT_TASK_TAB);
   const [totalTime, setTotalTime] = useState(0);
   const [pastTasksList, setPastTasksList] = useState([]);
   const [currTasksList, setCurrTasksList] = useState([]);
@@ -20,7 +24,7 @@ const Popup = () => {
   const fetchCurrTasksList = () => {
     axios
       .get(
-        URL + 'active-tasks/retrieve',
+        '/active-tasks/retrieve',
         {
           params: {
             userID: 1,
@@ -30,9 +34,8 @@ const Popup = () => {
       .then(({ data }) => {
         const tasksList = data['tasks_list'];
         console.log(tasksList);
-
         setCurrTasksList([]);
-        tasksList.forEach((task) =>
+        tasksList.sort((a, b) => b['start'] - a['start']).forEach((task) =>
           setCurrTasksList((prevState) => [
             ...prevState,
             {
@@ -55,7 +58,7 @@ const Popup = () => {
   // over in local state
   const fetchPastTasksList = () => {
     axios
-      .get(URL + 'inactive-tasks/retrieve', {
+      .get('/inactive-tasks/retrieve', {
         params: {
           userID: 1,
         },
@@ -80,14 +83,14 @@ const Popup = () => {
           ])
         );
       })
-      .catch((e) => console.log('fetchCurrTasksList fetch'));
+      .catch((e) => console.log(e));
   };
 
   // Initial call to fetch task list that is stored in dynamodb
   useEffect(() => {
     fetchCurrTasksList();
     fetchPastTasksList();
-  }, []);
+  }, [tab]);
 
   // Send updated version of the task periodically when a task is playing
   useInterval(() => {
@@ -118,22 +121,25 @@ const Popup = () => {
     }
   }, 1000);
 
+  let currTab = "Page not found";
+  if (tab === CURRENT_TASK_TAB) {
+    currTab = (
+      <CurrTaskScreen
+        tasksList={currTasksList}
+        setTasksList={setCurrTasksList}
+        totalTime={totalTime}
+        labels={labels}
+        setLabels={setLabels}
+      />
+    );
+  } else if (tab === PAST_TASK_TAB) {
+    currTab = <PastTaskScreen tasksList={pastTasksList} labels={labels} />;
+  }
+
   return (
     <div className='Popup'>
-      <Navbar setCurrPage={setCurrPage} currPage={currPage} />
-      {currPage === CURRENT_TASK_TAB ? (
-        <CurrTaskScreen
-          tasksList={currTasksList}
-          setCurrTasksList={setCurrTasksList}
-          setPastTasksList={setPastTasksList}
-          totalTime={totalTime}
-          setTotalTime={setTotalTime}
-          labels={labels}
-          setLabels={setLabels}
-        />
-      ) : (
-        <PastTaskScreen tasksList={pastTasksList} />
-      )}
+      <Navbar setTab={setTab} tab={tab} />
+      {currTab}
     </div>
   );
 }

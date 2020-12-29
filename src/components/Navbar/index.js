@@ -1,16 +1,16 @@
 import React from 'react'
-import { CURRENT_TASK_TAB, PAST_TASK_TAB } from 'globals.js'
+import { CURRENT_TASK_TAB, PAST_TASK_TAB } from 'utils/constants'
 import currTaskBtn from 'images/timerIcon.png'
 import pastTaskBtn from 'images/historyIcon.png';
 import './index.css'
 
-const Navbar = ({ currPage, setCurrPage }) => {
+const Navbar = ({ tab, setTab }) => {
   let currTab = "off";
   let pastTab = 'off';
-  if (currPage === CURRENT_TASK_TAB) {
+  if (tab === CURRENT_TASK_TAB) {
     currTab = "on"
   }
-  if (currPage === PAST_TASK_TAB) {
+  if (tab === PAST_TASK_TAB) {
     pastTab = "on"
   }
 
@@ -18,7 +18,7 @@ const Navbar = ({ currPage, setCurrPage }) => {
     <nav>
       <div
         className={'nav-item-' + currTab}
-        onClick={() => setCurrPage(CURRENT_TASK_TAB)}
+        onClick={() => setTab(CURRENT_TASK_TAB)}
       >
         <img
           className={'tab-image-' + currTab}
@@ -28,7 +28,7 @@ const Navbar = ({ currPage, setCurrPage }) => {
       </div>
       <div
         className={'nav-item-' + pastTab}
-        onClick={() => setCurrPage(PAST_TASK_TAB)}
+        onClick={() => setTab(PAST_TASK_TAB)}
       >
         {' '}
         <img

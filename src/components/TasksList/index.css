@@ -1,0 +1,55 @@
+
+.task-item-container {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.circle-button, .play-button {
+  width: 25px;
+  height: 25px;
+  border-radius: 25px;
+  background-color: #e0e0e0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.circle-button:hover, .play-button:hover, .new-task-button:hover {
+  cursor: pointer;
+}
+
+.button-img {
+  width: 13px;
+}
+
+.play-button {
+  width: 110px;
+  color: #333333;
+  padding: 0 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.buttons-container {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 5px;
+}
+
+.task-name-container {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 10px;
+}
+
+.task-colour {
+  width: 20px;
+  height: 20px;
+  border-radius: 20px;
+}

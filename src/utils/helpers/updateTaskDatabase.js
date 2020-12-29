@@ -5,7 +5,9 @@
 */
 
 import axios from "axios";
-import { URL } from "globals";
+// import { URL } from "globals";
+
+const URL = 'https://ich7sma0mc.execute-api.us-east-2.amazonaws.com';
 
 const updateTaskDatabase = (userID, taskID, time) => {
   axios.put(
