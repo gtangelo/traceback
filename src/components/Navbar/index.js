@@ -1,17 +1,21 @@
-import React from 'react'
-import { CURRENT_TASK_TAB, PAST_TASK_TAB } from 'utils/constants'
-import currTaskBtn from 'images/timerIcon.png'
-import pastTaskBtn from 'images/historyIcon.png';
-import './index.css'
+import React from 'react';
+import { CURRENT_TASK_TAB, PAST_TASK_TAB, LABELS_TAB } from 'utils/constants';
+import './index.css';
+import { AiOutlineFieldTime, AiOutlineUnorderedList } from 'react-icons/ai';
+import { MdLabel } from 'react-icons/md';
 
 const Navbar = ({ tab, setTab }) => {
   let currTab = "off";
   let pastTab = 'off';
+  let labelsTab = 'off';
   if (tab === CURRENT_TASK_TAB) {
     currTab = "on"
   }
   if (tab === PAST_TASK_TAB) {
     pastTab = "on"
+  }
+  if (tab === LABELS_TAB) {
+    labelsTab = "on"
   }
 
   return (
@@ -20,21 +24,27 @@ const Navbar = ({ tab, setTab }) => {
         className={'nav-item-' + currTab}
         onClick={() => setTab(CURRENT_TASK_TAB)}
       >
-        <img
-          className={'tab-image-' + currTab}
-          src={currTaskBtn}
-          alt='Current Tasks'
+        <AiOutlineFieldTime
+          size='25px'
+          color={currTab === 'on' ? '#333333' : '#F2F2F2'}
         />
       </div>
       <div
         className={'nav-item-' + pastTab}
         onClick={() => setTab(PAST_TASK_TAB)}
       >
-        {' '}
-        <img
-          className={'tab-image-' + pastTab}
-          src={pastTaskBtn}
-          alt='Past Tasks'
+        <AiOutlineUnorderedList
+          size='25px'
+          color={pastTab === 'on' ? '#333333' : '#F2F2F2'}
+        />
+      </div>
+      <div
+        className={'nav-item-' + labelsTab}
+        onClick={() => setTab(LABELS_TAB)}
+      >
+        <MdLabel
+          size='25px'
+          color={labelsTab === 'on' ? '#333333' : '#F2F2F2'}
         />
       </div>
     </nav>

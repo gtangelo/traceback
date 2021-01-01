@@ -6,11 +6,13 @@ import LabelIDToColour from 'utils/helpers/LabelIDToColour';
 import LabelIDToName from 'utils/helpers/LabelIDToName';
 import updateTaskDatabase from 'utils/helpers/updateTaskDatabase';
 
-import deleteBtn from 'images/deleteIcon.png';
-import finishBtn from 'images/uploadIcon.png';
-import playBtn from 'images/playIcon.png';
-import pauseBtn from 'images/pauseIcon.png';
-import infoBtn from 'images/infoIcon.png';
+import {
+  AiFillPlayCircle,
+  AiFillPauseCircle,
+  AiFillDelete,
+  AiOutlineCheck,
+  AiOutlineInfo,
+} from 'react-icons/ai';
 
 import { Tooltip } from '@material-ui/core';
 import TaskInfoModal from 'components/TaskInfoModal';
@@ -153,13 +155,9 @@ const TasksList = ({
                       onClick={() => PlayPauseTask(task)}
                     >
                       {!task.onPlay ? (
-                        <img className='button-img' src={playBtn} alt='Play' />
+                        <AiFillPlayCircle size='20px' color='#333333' />
                       ) : (
-                        <img
-                          className='button-img'
-                          src={pauseBtn}
-                          alt='Pause'
-                        />
+                        <AiFillPauseCircle size='20px' color='#333333' />
                       )}
                       <h5>{ClockConverter(task.time)}</h5>
                     </div>
@@ -167,27 +165,20 @@ const TasksList = ({
                       className='circle-button'
                       onClick={() => DeleteTask(task.taskID)}
                     >
-                      <img
-                        className='button-img'
-                        src={deleteBtn}
-                        alt='Delete'
-                      />
+                      <AiFillDelete size='20px' color='#333333' />
                     </div>
                     <div
                       className='circle-button'
                       onClick={() => FinishTask(task.taskID, task.time)}
+                      AiOutlineCheck
                     >
-                      <img
-                        className='button-img'
-                        src={finishBtn}
-                        alt='Finish'
-                      />
+                      <AiOutlineCheck size='20px' color='#333333' />
                     </div>
                     <div
                       className='circle-button'
                       onClick={() => setToggleInfo((prevState) => !prevState)}
                     >
-                      <img className='button-img' src={infoBtn} alt='Info' />
+                      <AiOutlineInfo size='20px' color='#333333' />
                     </div>
                   </div>
                 ) : (
@@ -199,7 +190,7 @@ const TasksList = ({
                       className='circle-button'
                       onClick={() => setToggleInfo((prevState) => !prevState)}
                     >
-                      <img className='button-img' src={infoBtn} alt='Info' />
+                      <AiOutlineInfo size='20px' color='#333333' />
                     </div>
                   </div>
                 )}

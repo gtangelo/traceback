@@ -18,10 +18,10 @@ nav {
   border-bottom: #F2F2F2 solid 1px;
 }
 
-.nav-item-on {
-  background-color: #F2F2F2;
+.nav-item-off:hover, .nav-item-on:hover {
+  cursor: pointer;
 }
 
-.tab-image-off, .tab-image-on {
-  width: 60%;
+.nav-item-on {
+  background-color: #F2F2F2;
 }

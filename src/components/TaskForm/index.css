@@ -24,23 +24,31 @@
   flex-wrap: nowrap;
   overflow-x: auto;
   gap: 15px;
-  align-items: flex-end;
-  height: 40px;
+  align-items: center;
+  height: 45px;
   padding: 5px 0;
 }
 
-/* .label-selection:-webkit-scrollbar {    display: none;} */
-
-
-.radio-button-on, .radio-button-off {
+.radio-button-container {
   width: 25px;
   height: 25px;
-  border-radius: 25px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   flex: 0 0 auto;
+}
+
+.radio-button-on, .radio-button-off {
+  width: 20px;
+  height: 20px;
+  border-radius: 20px;
 }
 
 .radio-button-on {
   opacity: 0.5;
+  width: 25px;
+  height: 25px;
+  border-radius: 25px;
 }
 
 .radio-button-on:hover, .radio-button-off:hover {

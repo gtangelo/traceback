@@ -10,40 +10,63 @@ import LabelForm from './LabelForm';
 const TaskForm = ({ ToggleTaskForm, labels, setLabels, setTasksList }) => {
   const [labelID, setLabelID] = useState(0);
   const [toggleLabelForm, setToggleLabelForm] = useState(false);
-
+  const [time, setTime] = useState(0);
+  const [toggleManualTime, setToggleManualTime] = useState(false);
+  const [error, setError] = useState('');
 
   // Add a new task to both dynamodb database and local state
-  const CreateTask = (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    ToggleTaskForm();
     const name = e.target[0].value;
     const description = e.target[1].value;
-    axios
-      .post('/active-task/create', {
-        userID: 1,
-        labelID: labelID,
-        name: name,
-        description: description,
-      })
-      .then(({ data }) => {
-        const taskID = data['taskID'];
-        const start = data['start'];
-        setTasksList((prevState) => [
-          {
-            userID: 1,
-            taskID: taskID,
-            labelID: labelID,
-            time: 0,
-            name: name,
-            description: description,
-            start: start,
-            onPlay: false,
-          },
-          ...prevState,
-        ]);
-      })
-      .catch((e) => console.log(`/active-task/create - ${e}`));
-    e.target.reset();
+
+    // form fields validation
+    if (description.length <= 0) {
+      setError('Description must be greater than 0 characters');
+    }
+    if (name.length <= 0) {
+      setError('Label must be greater than 0 characters');
+    }
+    if (!(/^\d*$/.test(time)) || time < 0) {
+      setError('Time must be an integer value and be greater than 0');
+    }
+
+    if (
+      name.length > 0 &&
+      description.length > 0 &&
+      /^\d*$/.test(time) &&
+      time > 0
+    ) {
+      ToggleTaskForm();
+      axios
+        .post('/active-task/create', {
+          userID: 1,
+          labelID: labelID,
+          name: name,
+          description: description,
+          time: time,
+        })
+        .then(({ data }) => {
+          const taskID = data['taskID'];
+          const start = data['start'];
+          setTasksList((prevState) => [
+            {
+              userID: 1,
+              taskID: taskID,
+              labelID: labelID,
+              time: time,
+              name: name,
+              description: description,
+              start: start,
+              onPlay: false,
+            },
+            ...prevState,
+          ]);
+          setTime(0);
+        })
+        .catch((e) => console.log(e));
+      e.target.reset();
+    }
   };
 
   return (
@@ -59,7 +82,7 @@ const TaskForm = ({ ToggleTaskForm, labels, setLabels, setTasksList }) => {
             onClick={ToggleTaskForm}
           />
         </div>
-        <form onSubmit={CreateTask}>
+        <form onSubmit={handleSubmit}>
           <div className='flex-container'>
             <TextField id='taskName' type='text' placeholder='Task Name' />
             <TextField
@@ -69,47 +92,56 @@ const TaskForm = ({ ToggleTaskForm, labels, setLabels, setTasksList }) => {
             />
           </div>
           <br />
-          {/* <input
-            type='checkbox'
-            onChange={() => setManualTime((state) => !state)}
-          />
-          <div className={manualTime ? '' : 'hidden'}>
-            <TextField
-              id='time'
-              type='text'
-              onChange={(e) => setTime(e.target.value)}
-              placeholder='Manual Time'
-            />
-          </div> */}
+          <div className='flex-container'>
+            <label>
+              <input
+                type='checkbox'
+                onChange={() => setToggleManualTime((prevState) => !prevState)}
+              />
+              Set Manual Time
+            </label>
+            <div className={toggleManualTime ? '' : 'hidden'}>
+              <TextField
+                id='time'
+                type='text'
+                onChange={(e) => setTime(e.target.value)}
+                placeholder='Manual Time'
+              />
+            </div>
+          </div>
           <div className='sub-heading'>Labels Selection</div>
           <div className='label-selection'>
             <Tooltip title='None' arrow>
-              <div
-                style={{ backgroundColor: '#eeeeee' }}
-                className={
-                  labelID === 0 ? 'radio-button-on' : 'radio-button-off'
-                }
-                onClick={() => setLabelID(0)}
-              />
+              <div className='radio-button-container'>
+                <div
+                  style={{ backgroundColor: '#eeeeee' }}
+                  className={
+                    labelID === 0 ? 'radio-button-on' : 'radio-button-off'
+                  }
+                  onClick={() => setLabelID(0)}
+                />
+              </div>
             </Tooltip>
             {labels.map((label, i) => (
               <Tooltip title={label.name} arrow>
-                <div
-                  style={{ backgroundColor: label.colour }}
-                  className={
-                    labelID === label.labelID
-                      ? 'radio-button-on'
-                      : 'radio-button-off'
-                  }
-                  key={i}
-                  onClick={() => setLabelID(label.labelID)}
-                />
+                <div className='radio-button-container'>
+                  <div
+                    style={{ backgroundColor: label.colour }}
+                    className={
+                      labelID === label.labelID
+                        ? 'radio-button-on'
+                        : 'radio-button-off'
+                    }
+                    key={i}
+                    onClick={() => setLabelID(label.labelID)}
+                  />
+                </div>
               </Tooltip>
             ))}
             <Tooltip title='Add Label' arrow>
               <div
                 style={{ backgroundColor: '#eeeeee' }}
-                className='radio-button-off'
+                className='radio-button-on'
                 onClick={() => setToggleLabelForm((prevState) => !prevState)}
               >
                 <AddIcon style={{ color: '#000000' }} />
@@ -117,13 +149,18 @@ const TaskForm = ({ ToggleTaskForm, labels, setLabels, setTasksList }) => {
             </Tooltip>
           </div>
           <br />
+          <div className={toggleLabelForm ? 'display' : 'hidden'}>
+            <LabelForm
+              labels={labels}
+              setLabels={setLabels}
+              setToggleLabelForm={setToggleLabelForm}
+            />
+          </div>
+          {error}
           <button className='new-task-button' id='Submit' type='submit'>
-            Submit
+            Add Task
           </button>
         </form>
-        <div className={toggleLabelForm ? 'display' : 'hidden'}>
-          <LabelForm labels={labels} setLabels={setLabels} />
-        </div>
       </div>
     </div>
   );

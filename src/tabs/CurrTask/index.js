@@ -3,8 +3,9 @@ import { CURRENT_TASK_TAB } from 'utils/constants';
 import ClockConverter from 'utils/helpers/ClockConverter';
 import TaskForm from 'components/TaskForm';
 import TasksList from 'components/TasksList';
-import deleteBtn from 'images/deleteIcon.png';
 import './index.css';
+import { AiOutlinePlus } from 'react-icons/ai';
+
 
 const CurrTaskScreen = ({
   tasksList,
@@ -25,24 +26,28 @@ const CurrTaskScreen = ({
     ));
   }
 
+  const taskForm = toggleForm && (
+    <div>
+      <TaskForm
+        ToggleTaskForm={() => setToggleForm((prevState) => !prevState)}
+        labels={labels}
+        setLabels={setLabels}
+        setTasksList={setTasksList}
+      />
+    </div>
+  );
+
   return (
     <div className='tab-container'>
-      <div className={!toggleForm ? 'hidden' : ''}>
-        <TaskForm
-          ToggleTaskForm={() => setToggleForm((prevState) => !prevState)}
-          labels={labels}
-          setLabels={setLabels}
-          setTasksList={setTasksList}
-        />
-      </div>
+      {taskForm}
       <div className='tracking-navbar'>
         <div className='heading'>Tracking</div>
         <div
           className='new-task-button'
           onClick={() => setToggleForm((prevState) => !prevState)}
         >
-          <img className='button-img' src={deleteBtn} alt='Add Task' />
-          <h5>Add New Task</h5>
+          <AiOutlinePlus size='20px' color='#333333' />
+          <h5>Add Task</h5>
         </div>
       </div>
       <div className='tracking-section'>

@@ -4,13 +4,14 @@ import './axios'
 
 import useInterval from 'utils/hooks/useInterval';
 import updateTaskDatabase from 'utils/helpers/updateTaskDatabase';
-import { CURRENT_TASK_TAB, PAST_TASK_TAB } from 'utils/constants';
+import { CURRENT_TASK_TAB, PAST_TASK_TAB, LABELS_TAB } from 'utils/constants';
 
 import Navbar from 'components/Navbar/';
 import CurrTaskScreen from 'tabs/CurrTask/';
 import PastTaskScreen from 'tabs/PastTask/';
 
 import './Popup.css'
+import LabelsTab from 'tabs/LabelsTab';
 
 const Popup = () => {
   const [tab, setTab] = useState(CURRENT_TASK_TAB);
@@ -23,33 +24,15 @@ const Popup = () => {
   // over in local state
   const fetchCurrTasksList = () => {
     axios
-      .get(
-        '/active-tasks/retrieve',
-        {
-          params: {
-            userID: 1,
-          },
-        }
-      )
+      .get('/active-tasks/retrieve', {
+        params: {
+          userID: 1,
+        },
+      })
       .then(({ data }) => {
         const tasksList = data['tasks_list'];
         console.log(tasksList);
-        setCurrTasksList([]);
-        tasksList.sort((a, b) => b['start'] - a['start']).forEach((task) =>
-          setCurrTasksList((prevState) => [
-            ...prevState,
-            {
-              userID: task['userID'],
-              taskID: task['taskID'],
-              labelID: task['labelID'],
-              time: task['time'],
-              name: task['name'],
-              description: task['description'],
-              start: task['start'],
-              onPlay: false,
-            },
-          ])
-        );
+        setCurrTasksList(tasksList.sort((a, b) => b['start'] - a['start']));
       })
       .catch((e) => console.log(e));
   };
@@ -66,22 +49,24 @@ const Popup = () => {
       .then(({ data }) => {
         const tasksList = data['tasks_list'];
         console.log(tasksList);
-        setPastTasksList([]);
-        tasksList.forEach((task) =>
-          setPastTasksList((prevState) => [
-            ...prevState,
-            {
-              userID: task['userID'],
-              taskID: task['taskID'],
-              labelID: task['labelID'],
-              time: task['time'],
-              name: task['name'],
-              description: task['description'],
-              start: task['start'],
-              end: task['end'],
-            },
-          ])
-        );
+        setPastTasksList(tasksList.sort((a, b) => b['start'] - a['start']));
+      })
+      .catch((e) => console.log(e));
+  };
+
+  // API call to fetch all labels that is stored in dynamodb on AWS and then copies
+  // over in local state
+  const fetchLabels = () => {
+    axios
+      .get('/labels/retrieve', {
+        params: {
+          userID: 1,
+        },
+      })
+      .then(({ data }) => {
+        const labels = data['labels'];
+        console.log(labels);
+        setLabels(labels);
       })
       .catch((e) => console.log(e));
   };
@@ -90,6 +75,7 @@ const Popup = () => {
   useEffect(() => {
     fetchCurrTasksList();
     fetchPastTasksList();
+    fetchLabels();
   }, [tab]);
 
   // Send updated version of the task periodically when a task is playing
@@ -107,7 +93,7 @@ const Popup = () => {
     setCurrTasksList((currTasksList) =>
       currTasksList.map((task) => {
         if (task.onPlay) {
-          return { ...task, time: task.time++ };
+          return { ...task, time: task.time + 1 };
         }
         return task;
       })
@@ -121,7 +107,7 @@ const Popup = () => {
     }
   }, 1000);
 
-  let currTab = "Page not found";
+  let currTab = 'Page not found';
   if (tab === CURRENT_TASK_TAB) {
     currTab = (
       <CurrTaskScreen
@@ -134,6 +120,8 @@ const Popup = () => {
     );
   } else if (tab === PAST_TASK_TAB) {
     currTab = <PastTaskScreen tasksList={pastTasksList} labels={labels} />;
+  } else if (tab === LABELS_TAB) {
+    currTab = <LabelsTab labels={labels} />
   }
 
   return (

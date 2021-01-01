@@ -5,15 +5,15 @@
 }
 
 .new-task-button {
-  width: 150px;
-  height: 35px;
+  height: 30px;
   background: linear-gradient(180deg, #BB6BD9 0%, #9144D8 100%);
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 20px;
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  padding: 0 20px;
+  gap: 5px;
+  padding: 0 10px;
+  font-size: 15px;
 }
 
 .tracking-section {

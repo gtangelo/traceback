@@ -4,6 +4,7 @@
   height: 350px;
   background-color: #FAF9F9;
   display: flex;
+  font-size: 14px;
 }
 
 .tab-container {
@@ -16,14 +17,14 @@
 }
 
 .sub-heading {
-  font-size: 20px;
+  font-size: 16px;
   color: #bdbdbd;
   margin-bottom: 5px;
   font-weight: bold;
 }
 
 .heading {
-  font-size: 26px;
+  font-size: 20px;
   color: #bdbdbd;
   margin-bottom: 10px;
   font-weight: bolder;
@@ -31,8 +32,14 @@
 
 .task-name {
   font-weight: bold;
-  font-size: 15px;
+  font-size: 14px;
   letter-spacing: 1px;
+}
+
+.task-colour {
+  width: 15px;
+  height: 15px;
+  border-radius: 15px;
 }
 
 .hidden {
