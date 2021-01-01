@@ -1,13 +1,18 @@
 import React from 'react';
-import { CURRENT_TASK_TAB, PAST_TASK_TAB, LABELS_TAB } from 'utils/constants';
+import { CURRENT_TASK_TAB, PAST_TASK_TAB, LABELS_TAB, SEARCH_TAB } from 'utils/constants';
 import './index.css';
-import { AiOutlineFieldTime, AiOutlineUnorderedList } from 'react-icons/ai';
+import {
+  AiOutlineFieldTime,
+  AiOutlineUnorderedList,
+  AiOutlineSearch,
+} from 'react-icons/ai';
 import { MdLabel } from 'react-icons/md';
 
 const Navbar = ({ tab, setTab }) => {
   let currTab = "off";
   let pastTab = 'off';
   let labelsTab = 'off';
+  let searchTab = "off";
   if (tab === CURRENT_TASK_TAB) {
     currTab = "on"
   }
@@ -16,6 +21,9 @@ const Navbar = ({ tab, setTab }) => {
   }
   if (tab === LABELS_TAB) {
     labelsTab = "on"
+  }
+  if (tab === SEARCH_TAB) {
+    searchTab = "on"
   }
 
   return (
@@ -45,6 +53,15 @@ const Navbar = ({ tab, setTab }) => {
         <MdLabel
           size='25px'
           color={labelsTab === 'on' ? '#333333' : '#F2F2F2'}
+        />
+      </div>
+      <div
+        className={'nav-item-' + searchTab}
+        onClick={() => setTab(SEARCH_TAB)}
+      >
+        <AiOutlineSearch
+          size='25px'
+          color={searchTab === 'on' ? '#333333' : '#F2F2F2'}
         />
       </div>
     </nav>

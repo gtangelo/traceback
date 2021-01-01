@@ -62,7 +62,7 @@ const LabelForm = ({ setLabels, setToggleLabelForm }) => {
         })
         .catch((e) => console.log(e));
       e.target.reset();
-    }    
+    }
   };
 
   return (

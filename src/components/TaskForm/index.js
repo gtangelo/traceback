@@ -35,7 +35,7 @@ const TaskForm = ({ ToggleTaskForm, labels, setLabels, setTasksList }) => {
       name.length > 0 &&
       description.length > 0 &&
       /^\d*$/.test(time) &&
-      time > 0
+      time >= 0
     ) {
       ToggleTaskForm();
       axios
@@ -149,18 +149,18 @@ const TaskForm = ({ ToggleTaskForm, labels, setLabels, setTasksList }) => {
             </Tooltip>
           </div>
           <br />
-          <div className={toggleLabelForm ? 'display' : 'hidden'}>
-            <LabelForm
-              labels={labels}
-              setLabels={setLabels}
-              setToggleLabelForm={setToggleLabelForm}
-            />
-          </div>
           {error}
           <button className='new-task-button' id='Submit' type='submit'>
             Add Task
           </button>
         </form>
+        <div className={toggleLabelForm ? 'display' : 'hidden'}>
+          <LabelForm
+            labels={labels}
+            setLabels={setLabels}
+            setToggleLabelForm={setToggleLabelForm}
+          />
+        </div>
       </div>
     </div>
   );

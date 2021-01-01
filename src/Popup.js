@@ -4,14 +4,15 @@ import './axios'
 
 import useInterval from 'utils/hooks/useInterval';
 import updateTaskDatabase from 'utils/helpers/updateTaskDatabase';
-import { CURRENT_TASK_TAB, PAST_TASK_TAB, LABELS_TAB } from 'utils/constants';
+import { CURRENT_TASK_TAB, PAST_TASK_TAB, LABELS_TAB, SEARCH_TAB } from 'utils/constants';
 
 import Navbar from 'components/Navbar/';
-import CurrTaskScreen from 'tabs/CurrTask/';
-import PastTaskScreen from 'tabs/PastTask/';
 
 import './Popup.css'
 import LabelsTab from 'tabs/LabelsTab';
+import SearchTab from 'tabs/SearchTab';
+import CurrTaskTab from 'tabs/CurrTaskTab';
+import PastTaskTab from 'tabs/PastTaskTab';
 
 const Popup = () => {
   const [tab, setTab] = useState(CURRENT_TASK_TAB);
@@ -32,7 +33,24 @@ const Popup = () => {
       .then(({ data }) => {
         const tasksList = data['tasks_list'];
         console.log(tasksList);
-        setCurrTasksList(tasksList.sort((a, b) => b['start'] - a['start']));
+        setCurrTasksList([]);
+        tasksList
+          .sort((a, b) => b['start'] - a['start'])
+          .forEach((task) =>
+            setCurrTasksList((prevState) => [
+              ...prevState,
+              {
+                userID: task['userID'],
+                taskID: task['taskID'],
+                labelID: task['labelID'],
+                time: task['time'],
+                name: task['name'],
+                description: task['description'],
+                start: task['start'],
+                onPlay: false,
+              },
+            ])
+          );
       })
       .catch((e) => console.log(e));
   };
@@ -76,6 +94,11 @@ const Popup = () => {
     fetchCurrTasksList();
     fetchPastTasksList();
     fetchLabels();
+  }, []);
+
+  // Fetch updated call
+  useEffect(() => {
+    fetchPastTasksList();
   }, [tab]);
 
   // Send updated version of the task periodically when a task is playing
@@ -106,11 +129,21 @@ const Popup = () => {
       setTotalTime((totalTime) => totalTime + 1);
     }
   }, 1000);
+  
+  const play = currTasksList.filter((task) => task.onPlay).length > 0;
+
+  useEffect(() => {
+    if (play) {
+      console.log("play")
+    } else {
+      console.log("not play")
+    }
+  }, [play])
 
   let currTab = 'Page not found';
   if (tab === CURRENT_TASK_TAB) {
     currTab = (
-      <CurrTaskScreen
+      <CurrTaskTab
         tasksList={currTasksList}
         setTasksList={setCurrTasksList}
         totalTime={totalTime}
@@ -119,9 +152,18 @@ const Popup = () => {
       />
     );
   } else if (tab === PAST_TASK_TAB) {
-    currTab = <PastTaskScreen tasksList={pastTasksList} labels={labels} />;
+    currTab = <PastTaskTab tasksList={pastTasksList} labels={labels} />;
   } else if (tab === LABELS_TAB) {
     currTab = <LabelsTab labels={labels} />
+  } else if (tab === SEARCH_TAB) {
+    currTab = (
+      <SearchTab
+        labels={labels}
+        currTasksList={currTasksList}
+        setCurrTasksList={setCurrTasksList}
+        pastTasksList={pastTasksList}
+      />
+    );
   }
 
   return (

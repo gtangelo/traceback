@@ -7,7 +7,7 @@ import './index.css';
 import { AiOutlinePlus } from 'react-icons/ai';
 
 
-const CurrTaskScreen = ({
+const CurrTaskTab = ({
   tasksList,
   setTasksList,
   totalTime,
@@ -64,4 +64,4 @@ const CurrTaskScreen = ({
   );
 };
 
-export default CurrTaskScreen;
+export default CurrTaskTab;

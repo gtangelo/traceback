@@ -2,7 +2,7 @@ import React from 'react';
 import TasksList from 'components/TasksList';
 import { PAST_TASK_TAB } from 'utils/constants';
 
-const PastTaskScreen = ({ tasksList, labels }) => {
+const PastTaskTab = ({ tasksList, labels }) => {
   return (
     <div className='tab-container'>
       <div className='heading'>Past Tasks</div>
@@ -15,4 +15,4 @@ const PastTaskScreen = ({ tasksList, labels }) => {
   );
 };
 
-export default PastTaskScreen;
+export default PastTaskTab;
