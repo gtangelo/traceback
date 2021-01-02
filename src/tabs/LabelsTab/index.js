@@ -1,10 +1,44 @@
-import React from 'react'
-import { AiOutlineInfo, AiFillDelete } from 'react-icons/ai';
+import axios from 'axios';
+import LabelForm from 'components/TaskForm/LabelForm';
+import React, { useState } from 'react';
+import { AiOutlinePlus, AiOutlineInfo, AiFillDelete } from 'react-icons/ai';
 
-const LabelsTab = ({ labels }) => {
+const LabelsTab = ({ labels, setLabels }) => {
+  const [toggleForm, setToggleForm] = useState(false)
+
+  const DeleteLabel = labelID => {
+    axios.delete('/label/delete', {
+      params: {
+        userID: 1,
+        labelID: labelID
+      }
+    }).then((e => console.log(e))).catch(e => console.log(e))
+  }
+
+  const labelForm = toggleForm && (
+    <div>
+      <LabelForm
+        setToggleLabelForm={() => setToggleForm((prevState) => !prevState)}
+        labels={labels}
+        setLabels={setLabels}
+      />
+    </div>
+  );
+
   return (
     <div className='tab-container'>
-      <div className='heading'>Labels</div>
+      {labelForm}
+      <br/>
+      <div className='tracking-navbar'>
+        <div className='heading'>Labels</div>
+        <div
+          className='new-task-button'
+          onClick={() => setToggleForm((prevState) => !prevState)}
+        >
+          <AiOutlinePlus size='20px' color='#333333' />
+          <h5>Add Label</h5>
+        </div>
+      </div>
       {labels.length === 0 ? (
         <div>No labels available to show</div>
       ) : (
@@ -23,7 +57,7 @@ const LabelsTab = ({ labels }) => {
               <div className='buttons-container'>
                 <div
                   className='circle-button'
-                  // onClick={() => DeleteTask(task.taskID)}
+                  onClick={() => DeleteLabel(label.labelID)}
                 >
                   <AiFillDelete size='20px' color='#333333' />
                 </div>

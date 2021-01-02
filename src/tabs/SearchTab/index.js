@@ -1,14 +1,5 @@
 import { TextField, Tooltip } from '@material-ui/core';
 import React, { useState } from 'react';
-import ClockConverter from 'utils/helpers/ClockConverter';
-import {
-  AiFillPlayCircle,
-  AiFillPauseCircle,
-  AiFillDelete,
-  AiOutlineCheck,
-  AiOutlineInfo,
-} from 'react-icons/ai';
-import SpliceArrayByDay from 'utils/helpers/SpliceArrayByDay';
 import TasksList from 'components/TasksList';
 import { CURRENT_TASK_TAB, PAST_TASK_TAB } from 'utils/constants';
 
@@ -94,6 +85,10 @@ const SearchTab = ({ labels, currTasksList, setCurrTasksList, pastTasksList }) =
                   setCurrTasksList={setCurrTasksList}
                   labels={labels}
                   tab={CURRENT_TASK_TAB}
+                  showDate={true}
+                  showDelete={true}
+                  showFinish={true}
+                  showInfo={false}
                 />
               </>
             )}
@@ -104,6 +99,10 @@ const SearchTab = ({ labels, currTasksList, setCurrTasksList, pastTasksList }) =
                   tasksList={pastTasksListFiltered}
                   labels={labels}
                   tab={PAST_TASK_TAB}
+                  showDate={false}
+                  showDelete={false}
+                  showFinish={false}
+                  showInfo={false}
                 />
               </>
             )}
@@ -112,22 +111,30 @@ const SearchTab = ({ labels, currTasksList, setCurrTasksList, pastTasksList }) =
           <>
             {currTasksListSearch.length > 0 && (
               <>
-                <div className='heading'>Ongoing Tasks</div>
+                {/* <div className='heading'>Ongoing Tasks</div> */}
                 <TasksList
                   tasksList={currTasksListSearch}
                   setCurrTasksList={setCurrTasksList}
                   labels={labels}
                   tab={CURRENT_TASK_TAB}
+                  showDate={false}
+                  showDelete={true}
+                  showFinish={true}
+                  showInfo={false}
                 />
               </>
             )}
             {pastTasksListSearch.length > 0 && (
               <>
-                <div className='heading'>Previous Tasks</div>
+                {/* <div className='heading'>Previous Tasks</div> */}
                 <TasksList
-                  tasksList={pastTasksListFiltered}
+                  tasksList={pastTasksListSearch}
                   labels={labels}
                   tab={PAST_TASK_TAB}
+                  showDate={false}
+                  showDelete={false}
+                  showFinish={false}
+                  showInfo={false}
                 />
               </>
             )}

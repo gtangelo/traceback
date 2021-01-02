@@ -9,7 +9,15 @@ const PastTaskTab = ({ tasksList, labels }) => {
       {tasksList.length === 0 ? (
         <div>No completed tasks available to show</div>
       ) : (
-        <TasksList tasksList={tasksList} labels={labels} tab={PAST_TASK_TAB} />
+        <TasksList
+          tasksList={tasksList}
+          labels={labels}
+          tab={PAST_TASK_TAB}
+          showDate={true}
+          showDelete={false}
+          showFinish={false}
+          showInfo={true}
+        />
       )}
     </div>
   );

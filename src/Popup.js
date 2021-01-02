@@ -20,6 +20,7 @@ const Popup = () => {
   const [pastTasksList, setPastTasksList] = useState([]);
   const [currTasksList, setCurrTasksList] = useState([]);
   const [labels, setLabels] = useState([]);
+  const [totalTimeLog, setTotalTimeLog] = useState([]);
 
   // API call to fetch task list that is stored in dynamodb on AWS and then copies
   // over in local state
@@ -134,8 +135,23 @@ const Popup = () => {
 
   useEffect(() => {
     if (play) {
+      const log = {}
+      log.start = new Date()
+      setTotalTimeLog(prevState => [...prevState, log])
       console.log("play")
     } else {
+      let tmp = totalTimeLog
+      if (tmp.length > 0) {
+        tmp[tmp.length - 1].end = new Date();
+      }
+      console.log(tmp)
+      setTotalTimeLog(tmp)
+      let t = tmp.reduce(
+        (total, time) =>
+          total + time.end.getTime() - time.start.getTime(),
+        0
+      );
+      console.log(t/1000);
       console.log("not play")
     }
   }, [play])
@@ -154,7 +170,7 @@ const Popup = () => {
   } else if (tab === PAST_TASK_TAB) {
     currTab = <PastTaskTab tasksList={pastTasksList} labels={labels} />;
   } else if (tab === LABELS_TAB) {
-    currTab = <LabelsTab labels={labels} />
+    currTab = <LabelsTab labels={labels} setLabels={setLabels} />
   } else if (tab === SEARCH_TAB) {
     currTab = (
       <SearchTab

@@ -59,6 +59,10 @@ const CurrTaskTab = ({
         setCurrTasksList={setTasksList}
         labels={labels}
         tab={CURRENT_TASK_TAB}
+        showDate={true}
+        showDelete={true}
+        showFinish={true}
+        showInfo={true}
       />
     </div>
   );

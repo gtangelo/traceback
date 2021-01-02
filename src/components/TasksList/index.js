@@ -25,7 +25,11 @@ const TasksList = ({
   tasksList,
   setCurrTasksList,
   labels,
-  tab
+  tab,
+  showDate,
+  showDelete,
+  showFinish,
+  showInfo
 }) => {
   const [toggleInfo, setToggleInfo] = useState(false);
 
@@ -97,9 +101,11 @@ const TasksList = ({
     <div className='task-list-section'>
       {tasksDayList.map((tasks, i) => (
         <div key={i}>
-          <div className='sub-heading'>
-            {ConvertDateToDay(tasks[0]['start'])}
-          </div>
+          {showDate && (
+            <div className='sub-heading'>
+              {ConvertDateToDay(tasks[0]['start'])}
+            </div>
+          )}
           {tasks.map((task, i) => (
             <div key={i}>
               <div className={!toggleInfo ? 'hidden' : ''}>
@@ -135,37 +141,45 @@ const TasksList = ({
                       )}
                       <h5>{ClockConverter(task.time)}</h5>
                     </div>
-                    <div
-                      className='circle-button'
-                      onClick={() => DeleteTask(task.taskID)}
-                    >
-                      <AiFillDelete size='20px' color='#333333' />
-                    </div>
-                    <div
-                      className='circle-button'
-                      onClick={() => FinishTask(task.taskID, task.time)}
-                      AiOutlineCheck
-                    >
-                      <AiOutlineCheck size='20px' color='#333333' />
-                    </div>
-                    <div
-                      className='circle-button'
-                      onClick={() => setToggleInfo((prevState) => !prevState)}
-                    >
-                      <AiOutlineInfo size='20px' color='#333333' />
-                    </div>
+                    {showDelete && (
+                      <div
+                        className='circle-button'
+                        onClick={() => DeleteTask(task.taskID)}
+                      >
+                        <AiFillDelete size='20px' color='#333333' />
+                      </div>
+                    )}
+                    {showFinish && (
+                      <div
+                        className='circle-button'
+                        onClick={() => FinishTask(task.taskID, task.time)}
+                        AiOutlineCheck
+                      >
+                        <AiOutlineCheck size='20px' color='#333333' />
+                      </div>
+                    )}
+                    {showInfo && (
+                      <div
+                        className='circle-button'
+                        onClick={() => setToggleInfo((prevState) => !prevState)}
+                      >
+                        <AiOutlineInfo size='20px' color='#333333' />
+                      </div>
+                    )}
                   </div>
                 ) : (
                   <div className='buttons-container'>
                     <div className='play-button'>
                       <h5>{ClockConverter(task.time)}</h5>
                     </div>
-                    <div
-                      className='circle-button'
-                      onClick={() => setToggleInfo((prevState) => !prevState)}
-                    >
-                      <AiOutlineInfo size='20px' color='#333333' />
-                    </div>
+                    {showInfo && (
+                      <div
+                        className='circle-button'
+                        onClick={() => setToggleInfo((prevState) => !prevState)}
+                      >
+                        <AiOutlineInfo size='20px' color='#333333' />
+                      </div>
+                    )}
                   </div>
                 )}
               </div>
