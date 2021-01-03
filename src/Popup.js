@@ -15,6 +15,7 @@ import CurrTaskTab from 'tabs/CurrTaskTab';
 import PastTaskTab from 'tabs/PastTaskTab';
 import retrieveCurrTasks from 'utils/helpers/retrieveCurrTasks';
 import retrievePastTasks from 'utils/helpers/retrievePastTasks';
+import retrieveLabels from 'utils/helpers/retrieveLabels';
 
 const Popup = () => {
   const [tab, setTab] = useState(CURRENT_TASK_TAB);
@@ -23,22 +24,6 @@ const Popup = () => {
   const [currTasks, setCurrTasks] = useState([]);
   const [labels, setLabels] = useState([]);
   const [timeLog, setTimeLog] = useState({});
-
-  // API call to fetch all labels that is stored in dynamodb on AWS and then copies
-  // over in local state
-  const fetchLabels = () => {
-    axios
-      .get('/labels/retrieve', {
-        params: {
-          userID: 1,
-        },
-      })
-      .then(({ data }) => {
-        const labels = data['labels'];
-        setLabels(labels);
-      })
-      .catch((e) => console.log(e));
-  };
 
   // For every time the popup is clicked, make an initial API call depending on
   // the context.
@@ -62,7 +47,7 @@ const Popup = () => {
         retrieveCurrTasks(setCurrTasks);
       }
       retrievePastTasks(setPastTasks);
-      fetchLabels();
+      retrieveLabels();
     });
   }, []);
 
@@ -130,6 +115,7 @@ const Popup = () => {
         currTasks={currTasks}
         setCurrTasks={setCurrTasks}
         pastTasks={pastTasks}
+        totalTime={totalTime}
       />
     );
   }

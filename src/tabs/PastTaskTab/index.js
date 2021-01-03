@@ -14,10 +14,10 @@ const PastTaskTab = ({ pastTasks, labels, totalTime }) => {
           labels={labels}
           tab={PAST_TASK_TAB}
           showDate={true}
-          showDelete={false}
-          showFinish={false}
           showInfo={true}
           totalTime={totalTime}
+          showTime={true}
+          showToday={false}
         />
       )}
     </div>

@@ -60,13 +60,15 @@ const CurrTaskTab = ({
         tasksList={currTasks}
         labels={labels}
         tab={CURRENT_TASK_TAB}
-        showDate={true}
         showDelete={true}
         showFinish={true}
         showInfo={true}
         setCurrTasks={setCurrTasks}
         setPastTasks={setPastTasks}
         totalTime={totalTime}
+        showTime={true}
+        showToday={true}
+        showDate={true}
       />
     </div>
   );

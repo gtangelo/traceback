@@ -2,6 +2,7 @@ import axios from 'axios';
 import LabelForm from 'components/TaskForm/LabelForm';
 import React, { useState } from 'react';
 import { AiOutlinePlus, AiOutlineInfo, AiFillDelete } from 'react-icons/ai';
+import retrieveLabels from 'utils/helpers/retrieveLabels';
 
 const LabelsTab = ({ labels, setLabels }) => {
   const [toggleForm, setToggleForm] = useState(false)
@@ -12,7 +13,9 @@ const LabelsTab = ({ labels, setLabels }) => {
         userID: 1,
         labelID: labelID
       }
-    }).then((e => console.log(e))).catch(e => console.log(e))
+    }).then(() => {
+      retrieveLabels(setLabels)
+    }).catch(e => console.log(e))
   }
 
   const labelForm = toggleForm && (
