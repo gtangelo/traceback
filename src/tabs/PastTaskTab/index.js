@@ -2,15 +2,15 @@ import React from 'react';
 import TasksList from 'components/TasksList';
 import { PAST_TASK_TAB } from 'utils/constants';
 
-const PastTaskTab = ({ tasksList, labels }) => {
+const PastTaskTab = ({ pastTasks, labels }) => {
   return (
     <div className='tab-container'>
       <div className='heading'>Past Tasks</div>
-      {tasksList.length === 0 ? (
+      {pastTasks.length === 0 ? (
         <div>No completed tasks available to show</div>
       ) : (
         <TasksList
-          tasksList={tasksList}
+          tasksList={pastTasks}
           labels={labels}
           tab={PAST_TASK_TAB}
           showDate={true}

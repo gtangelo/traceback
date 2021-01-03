@@ -1,3 +1,4 @@
+/* global chrome */
 import React, { useState } from 'react';
 import axios from 'axios';
 import { TextField, Tooltip } from '@material-ui/core';
@@ -5,9 +6,10 @@ import AddIcon from '@material-ui/icons/Add';
 import cancelBtn from 'images/deleteIcon.png';
 import './index.css';
 import LabelForm from './LabelForm';
+import retrieveCurrTasks from 'utils/helpers/retrieveCurrTasks';
 
 
-const TaskForm = ({ ToggleTaskForm, labels, setLabels, setTasksList }) => {
+const TaskForm = ({ ToggleTaskForm, labels, setLabels, setCurrTasks }) => {
   const [labelID, setLabelID] = useState(0);
   const [toggleLabelForm, setToggleLabelForm] = useState(false);
   const [time, setTime] = useState(0);
@@ -27,7 +29,7 @@ const TaskForm = ({ ToggleTaskForm, labels, setLabels, setTasksList }) => {
     if (name.length <= 0) {
       setError('Label must be greater than 0 characters');
     }
-    if (!(/^\d*$/.test(time)) || time < 0) {
+    if (!/^\d*$/.test(time) || time < 0) {
       setError('Time must be an integer value and be greater than 0');
     }
 
@@ -46,23 +48,8 @@ const TaskForm = ({ ToggleTaskForm, labels, setLabels, setTasksList }) => {
           description: description,
           time: time,
         })
-        .then(({ data }) => {
-          const taskID = data['taskID'];
-          const start = data['start'];
-          setTasksList((prevState) => [
-            {
-              userID: 1,
-              taskID: taskID,
-              labelID: labelID,
-              time: time,
-              name: name,
-              description: description,
-              start: start,
-              onPlay: false,
-            },
-            ...prevState,
-          ]);
-          setTime(0);
+        .then(() => {
+          retrieveCurrTasks(setCurrTasks);
         })
         .catch((e) => console.log(e));
       e.target.reset();

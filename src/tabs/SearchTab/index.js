@@ -4,21 +4,21 @@ import TasksList from 'components/TasksList';
 import { CURRENT_TASK_TAB, PAST_TASK_TAB } from 'utils/constants';
 
 
-const SearchTab = ({ labels, currTasksList, setCurrTasksList, pastTasksList }) => {
+const SearchTab = ({ labels, currTasks, setCurrTasks, pastTasks }) => {
   const [labelID, setLabelID] = useState(0);
   const [labelData, setLabelData] = useState("")
   const [search, setSearch] = useState("")
   
-  const currTasksListFiltered = currTasksList.filter(
+  const currTasksFiltered = currTasks.filter(
     (task) => task.labelID === labelID
   );
-  const pastTasksListFiltered = pastTasksList.filter((task) => task.labelID === labelID);
+  const pastTasksFiltered = pastTasks.filter((task) => task.labelID === labelID);
   let none = ""
-  if (currTasksListFiltered.length === 0 && pastTasksListFiltered.length === 0) {
+  if (currTasksFiltered.length === 0 && pastTasksFiltered.length === 0) {
     none = "No ongoing or previous tasks have been assigned with this label."
   }
-  const currTasksListSearch = currTasksList.filter(task => task.name.includes(search));
-  const pastTasksListSearch = pastTasksList.filter((task) =>
+  const currTasksSearch = currTasks.filter(task => task.name.includes(search));
+  const pastTasksSearch = pastTasks.filter((task) =>
     task.name.includes(search)
   );
     return (
@@ -77,12 +77,12 @@ const SearchTab = ({ labels, currTasksList, setCurrTasksList, pastTasksList }) =
             </div>
             <br />
             {none}
-            {currTasksListFiltered.length > 0 && (
+            {currTasksFiltered.length > 0 && (
               <>
                 <div className='heading'>Ongoing Tasks</div>
                 <TasksList
-                  tasksList={currTasksListFiltered}
-                  setCurrTasksList={setCurrTasksList}
+                  tasksList={currTasksFiltered}
+                  setCurrTasksList={setCurrTasks}
                   labels={labels}
                   tab={CURRENT_TASK_TAB}
                   showDate={true}
@@ -92,11 +92,11 @@ const SearchTab = ({ labels, currTasksList, setCurrTasksList, pastTasksList }) =
                 />
               </>
             )}
-            {pastTasksListFiltered.length > 0 && (
+            {pastTasksFiltered.length > 0 && (
               <>
                 <div className='heading'>Previous Tasks</div>
                 <TasksList
-                  tasksList={pastTasksListFiltered}
+                  tasksList={pastTasksFiltered}
                   labels={labels}
                   tab={PAST_TASK_TAB}
                   showDate={false}
@@ -109,12 +109,12 @@ const SearchTab = ({ labels, currTasksList, setCurrTasksList, pastTasksList }) =
           </>
         ) : (
           <>
-            {currTasksListSearch.length > 0 && (
+            {currTasksSearch.length > 0 && (
               <>
                 {/* <div className='heading'>Ongoing Tasks</div> */}
                 <TasksList
-                  tasksList={currTasksListSearch}
-                  setCurrTasksList={setCurrTasksList}
+                  tasksList={currTasksSearch}
+                  setCurrTasksList={setCurrTasks}
                   labels={labels}
                   tab={CURRENT_TASK_TAB}
                   showDate={false}
@@ -124,11 +124,11 @@ const SearchTab = ({ labels, currTasksList, setCurrTasksList, pastTasksList }) =
                 />
               </>
             )}
-            {pastTasksListSearch.length > 0 && (
+            {pastTasksSearch.length > 0 && (
               <>
                 {/* <div className='heading'>Previous Tasks</div> */}
                 <TasksList
-                  tasksList={pastTasksListSearch}
+                  tasksList={pastTasksSearch}
                   labels={labels}
                   tab={PAST_TASK_TAB}
                   showDate={false}

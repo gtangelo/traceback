@@ -6,23 +6,25 @@ import TasksList from 'components/TasksList';
 import './index.css';
 import { AiOutlinePlus } from 'react-icons/ai';
 
-
 const CurrTaskTab = ({
-  tasksList,
-  setTasksList,
+  currTasks,
+  setCurrTasks,
+  setPastTasks,
   totalTime,
   labels,
   setLabels,
 }) => {
   const [toggleForm, setToggleForm] = useState(false);
 
-  let activeTasks = tasksList.filter((task) => task.onPlay);
+  let activeTasks = currTasks.filter((task) => task.onPlay);
   let activeTaskList = (
     <div className='tracking-task-list'>No task tracking</div>
   );
   if (activeTasks.length !== 0) {
     activeTaskList = activeTasks.map((task, i) => (
-      <div className='task-name' key={i}>{task.name}</div>
+      <div className='task-name' key={i}>
+        {task.name}
+      </div>
     ));
   }
 
@@ -32,7 +34,7 @@ const CurrTaskTab = ({
         ToggleTaskForm={() => setToggleForm((prevState) => !prevState)}
         labels={labels}
         setLabels={setLabels}
-        setTasksList={setTasksList}
+        setCurrTasks={setCurrTasks}
       />
     </div>
   );
@@ -55,14 +57,15 @@ const CurrTaskTab = ({
         <h1>{ClockConverter(totalTime)}</h1>
       </div>
       <TasksList
-        tasksList={tasksList}
-        setCurrTasksList={setTasksList}
+        tasksList={currTasks}
         labels={labels}
         tab={CURRENT_TASK_TAB}
         showDate={true}
         showDelete={true}
         showFinish={true}
         showInfo={true}
+        setCurrTasks={setCurrTasks}
+        setPastTasks={setPastTasks}
       />
     </div>
   );

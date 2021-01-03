@@ -1,3 +1,4 @@
+/* global chrome */
 import React, { useState } from 'react';
 import axios from 'axios';
 
@@ -20,16 +21,19 @@ import { CURRENT_TASK_TAB } from 'utils/constants';
 
 import './index.css';
 import SpliceArrayByDay from 'utils/helpers/SpliceArrayByDay';
+import retrieveCurrTasks from 'utils/helpers/retrieveCurrTasks';
+import retrievePastTasks from 'utils/helpers/retrievePastTasks';
 
 const TasksList = ({
   tasksList,
-  setCurrTasksList,
   labels,
   tab,
   showDate,
   showDelete,
   showFinish,
-  showInfo
+  showInfo,
+  setCurrTasks,
+  setPastTasks
 }) => {
   const [toggleInfo, setToggleInfo] = useState(false);
 
@@ -38,11 +42,13 @@ const TasksList = ({
       updateTaskDatabase(task['userID'], task['taskID'], task['time']);
       console.log('updated task');
     }
-    setCurrTasksList((tasksList) =>
-      tasksList.map((item) =>
-        item.taskID === task.taskID ? { ...item, onPlay: !task.onPlay } : item
-      )
-    );
+    chrome.storage.sync.get("currTasks", ({ currTasks }) => {
+      chrome.storage.sync.set({
+        currTasks: currTasks.map((item) =>
+          item.taskID === task.taskID ? { ...item, onPlay: !task.onPlay } : item
+        ),
+      });
+    })
   };
 
   const DeleteTask = (taskID) => {
@@ -54,9 +60,8 @@ const TasksList = ({
         },
       })
       .then(() => {
-        setCurrTasksList((tasksList) =>
-          tasksList.filter((task) => task.taskID !== taskID)
-        );
+        retrieveCurrTasks(setCurrTasks);
+        retrievePastTasks(setPastTasks);
       })
       .catch((e) => console.log(e));
   };
@@ -69,9 +74,8 @@ const TasksList = ({
         time: time,
       })
       .then(() => {
-        setCurrTasksList((tasksList) =>
-          tasksList.filter((task) => task.taskID !== taskID)
-        );
+        retrieveCurrTasks(setCurrTasks);
+        retrievePastTasks(setPastTasks);
       })
       .catch((e) => console.log(e));
   };
