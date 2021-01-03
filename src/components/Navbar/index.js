@@ -1,3 +1,5 @@
+/* global chrome */
+
 import React from 'react';
 import { CURRENT_TASK_TAB, PAST_TASK_TAB, LABELS_TAB, SEARCH_TAB } from 'utils/constants';
 import './index.css';
@@ -25,6 +27,14 @@ const Navbar = ({ tab, setTab }) => {
   if (tab === SEARCH_TAB) {
     searchTab = "on"
   }
+
+    const Reset = () => {
+      chrome.storage.sync.set({
+        currTasks: [],
+        pastTasks: [],
+        totalTime: 0,
+      });
+    };
 
   return (
     <nav>
@@ -64,6 +74,7 @@ const Navbar = ({ tab, setTab }) => {
           color={searchTab === 'on' ? '#333333' : '#F2F2F2'}
         />
       </div>
+      <button onClick={Reset}>Reset</button>
     </nav>
   );
 };

@@ -1,4 +1,4 @@
 import axios from 'axios';
-import { URL } from './utils/constants';
 
-axios.defaults.baseURL = URL;
+axios.defaults.baseURL =
+  'https://ich7sma0mc.execute-api.us-east-2.amazonaws.com';

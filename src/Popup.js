@@ -22,7 +22,7 @@ const Popup = () => {
   const [pastTasks, setPastTasks] = useState([]);
   const [currTasks, setCurrTasks] = useState([]);
   const [labels, setLabels] = useState([]);
-  const [totalTimeLog, setTotalTimeLog] = useState([]);
+  const [timeLog, setTimeLog] = useState({});
 
   // API call to fetch all labels that is stored in dynamodb on AWS and then copies
   // over in local state
@@ -35,19 +35,8 @@ const Popup = () => {
       })
       .then(({ data }) => {
         const labels = data['labels'];
-        console.log(labels);
         setLabels(labels);
       })
-      .catch((e) => console.log(e));
-  };
-
-  // Make a PUT request to update data in the dynamodb database
-  const syncCurrTasks = (tasks) => {
-    axios
-      .put('/active-tasks/sync', {
-        tasks_list: tasks,
-      })
-      .then((resp) => console.log(resp))
       .catch((e) => console.log(e));
   };
 
@@ -58,10 +47,17 @@ const Popup = () => {
   // - Otherwise, if there is data in chrome storage, sync the dynamodb database
   //   with the tasks list found in chrome storage.
   // - Fetches label and past tasks data without any condition
+
+  // Furthermore, it fetches the total time spent of recording tasks for 
+  // previous days.
   useEffect(() => {
     chrome.storage.sync.get('currTasks', (payload) => {
       if (payload.currTasks.length > 0) {
-        syncCurrTasks(payload.currTasks);
+        axios
+          .put('/active-tasks/sync', {
+            tasks_list: currTasks,
+          })
+          .catch((e) => console.log(e));
       } else {
         retrieveCurrTasks(setCurrTasks);
       }
@@ -75,45 +71,32 @@ const Popup = () => {
   // the result in chrome storage.
   useInterval(() => {
     chrome.storage.sync.get(
-      ['currTasks', 'pastTasks'],
+      ['currTasks', 'pastTasks', 'totalTime'],
       (payload) => {
         setCurrTasks(payload.currTasks);
         setPastTasks(payload.pastTasks);
+        setTotalTime(payload.totalTime)
       }
     );
   }, 1000);
 
-  // TODO
-  // Update the total time if a task(s) is playing
-  useInterval(() => {
-    if (currTasks.filter((task) => task.onPlay).length > 0) {
-      setTotalTime((totalTime) => totalTime + 1);
-    }
-  }, 1000);
-
-
-  // Generates the start and end times of when atleast a single task has been 
+  // Generates the start and end times of when at least a single task has been 
   // playing.
   const play = currTasks.filter((task) => task.onPlay).length > 0;
   useEffect(() => {
     if (play) {
-      const log = {};
-      log.start = new Date();
-      setTotalTimeLog((prevState) => [...prevState, log]);
-      console.log('play');
+      setTimeLog({
+        start: Math.floor(new Date().getTime() / 1000),
+      });
     } else {
-      let tmp = totalTimeLog;
-      if (tmp.length > 0) {
-        tmp[tmp.length - 1].end = new Date();
-      }
-      console.log(tmp);
-      setTotalTimeLog(tmp);
-      let t = tmp.reduce(
-        (total, time) => total + time.end.getTime() - time.start.getTime(),
-        0
-      );
-      console.log(t / 1000);
-      console.log('not play');
+      axios
+        .post('/time-log/create', {
+          userID: 1,
+          start: timeLog['start'],
+          end: Math.floor(new Date().getTime() / 1000),
+        })
+        .then(() => setTimeLog({}))
+        .catch((e) => console.log(e));
     }
   }, [play]);
 
@@ -131,7 +114,13 @@ const Popup = () => {
       />
     );
   } else if (tab === PAST_TASK_TAB) {
-    currTab = <PastTaskTab pastTasks={pastTasks} labels={labels} />;
+    currTab = (
+      <PastTaskTab
+        pastTasks={pastTasks}
+        labels={labels}
+        totalTime={totalTime}
+      />
+    );
   } else if (tab === LABELS_TAB) {
     currTab = <LabelsTab labels={labels} setLabels={setLabels} />;
   } else if (tab === SEARCH_TAB) {

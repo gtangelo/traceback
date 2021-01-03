@@ -2,7 +2,7 @@ import React from 'react';
 import TasksList from 'components/TasksList';
 import { PAST_TASK_TAB } from 'utils/constants';
 
-const PastTaskTab = ({ pastTasks, labels }) => {
+const PastTaskTab = ({ pastTasks, labels, totalTime }) => {
   return (
     <div className='tab-container'>
       <div className='heading'>Past Tasks</div>
@@ -17,6 +17,7 @@ const PastTaskTab = ({ pastTasks, labels }) => {
           showDelete={false}
           showFinish={false}
           showInfo={true}
+          totalTime={totalTime}
         />
       )}
     </div>

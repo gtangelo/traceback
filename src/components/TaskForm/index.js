@@ -1,26 +1,28 @@
-/* global chrome */
 import React, { useState } from 'react';
 import axios from 'axios';
+import TimeField from 'react-simple-timefield';
 import { TextField, Tooltip } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import cancelBtn from 'images/deleteIcon.png';
 import './index.css';
 import LabelForm from './LabelForm';
-import retrieveCurrTasks from 'utils/helpers/retrieveCurrTasks';
-
+import syncCurrTasks from 'utils/helpers/syncCurrTasks';
 
 const TaskForm = ({ ToggleTaskForm, labels, setLabels, setCurrTasks }) => {
   const [labelID, setLabelID] = useState(0);
   const [toggleLabelForm, setToggleLabelForm] = useState(false);
-  const [time, setTime] = useState(0);
   const [toggleManualTime, setToggleManualTime] = useState(false);
   const [error, setError] = useState('');
+  const [time, setTime] = useState("00:00:00")
 
   // Add a new task to both dynamodb database and local state
   const handleSubmit = (e) => {
     e.preventDefault();
     const name = e.target[0].value;
     const description = e.target[1].value;
+    let timeFields = time.split(':'); // split it at the colons
+    let timeSeconds =
+      parseInt(timeFields[0]) * 60 * 60 + parseInt(timeFields[1]) * 60 + parseInt(timeFields[2]); 
 
     // form fields validation
     if (description.length <= 0) {
@@ -29,16 +31,10 @@ const TaskForm = ({ ToggleTaskForm, labels, setLabels, setCurrTasks }) => {
     if (name.length <= 0) {
       setError('Label must be greater than 0 characters');
     }
-    if (!/^\d*$/.test(time) || time < 0) {
-      setError('Time must be an integer value and be greater than 0');
-    }
 
     if (
       name.length > 0 &&
-      description.length > 0 &&
-      /^\d*$/.test(time) &&
-      time >= 0
-    ) {
+      description.length > 0) {
       ToggleTaskForm();
       axios
         .post('/active-task/create', {
@@ -46,10 +42,10 @@ const TaskForm = ({ ToggleTaskForm, labels, setLabels, setCurrTasks }) => {
           labelID: labelID,
           name: name,
           description: description,
-          time: time,
+          time: timeSeconds,
         })
         .then(() => {
-          retrieveCurrTasks(setCurrTasks);
+          syncCurrTasks(setCurrTasks)
         })
         .catch((e) => console.log(e));
       e.target.reset();
@@ -88,11 +84,19 @@ const TaskForm = ({ ToggleTaskForm, labels, setLabels, setCurrTasks }) => {
               Set Manual Time
             </label>
             <div className={toggleManualTime ? '' : 'hidden'}>
-              <TextField
-                id='time'
-                type='text'
+              <TimeField
+                value='00:00:00'
+                input={
+                  <TextField
+                    label='Time'
+                    id='outlined-size-small'
+                    defaultValue='Small'
+                    variant='outlined'
+                    size='small'
+                  />
+                }
                 onChange={(e) => setTime(e.target.value)}
-                placeholder='Manual Time'
+                showSeconds={true}
               />
             </div>
           </div>

@@ -66,6 +66,7 @@ const CurrTaskTab = ({
         showInfo={true}
         setCurrTasks={setCurrTasks}
         setPastTasks={setPastTasks}
+        totalTime={totalTime}
       />
     </div>
   );
