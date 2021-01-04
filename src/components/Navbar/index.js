@@ -29,7 +29,7 @@ const Navbar = ({ tab, setTab }) => {
   }
 
     const Reset = () => {
-      chrome.storage.sync.set({
+      chrome.storage.local.set({
         currTasks: [],
         pastTasks: [],
         totalTime: 0,

@@ -7,12 +7,10 @@ import colours from 'utils/colours';
 const LabelForm = ({ setLabels, setToggleLabelForm }) => {
   const [error, setError] = useState("")
   const [colourCode, setColourCode] = useState(null);
+  const [name, setName] = useState("")
+  const [description, setDescription] = useState("")
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const name = e.target[0].value;
-    const description = e.target[1].value;
-
+  const handleSubmit = () => {
     // form fields validation
     if (description.length <= 0) {
       setError('Description must be greater than 0 characters');
@@ -45,43 +43,50 @@ const LabelForm = ({ setLabels, setToggleLabelForm }) => {
               description: description,
             },
           ]);
+          setName("")
+          setDescription("")
+          setColourCode(null)
         })
         .catch((e) => console.log(e));
-      e.target.reset();
     }
   };
 
   return (
-    <div>
-      <form onSubmit={handleSubmit}>
-        <div className='flex-container'>
-          <TextField id='labelName' type='text' placeholder='Label Name' />
-          <TextField
-            id='labelDescription'
-            type='text'
-            placeholder='Label Description'
-          />
-        </div>
-        Select Colour Tag
-        <div className='label-selection'>
-          {colours.map((colour) => (
-            <div className='radio-button-container'>
-              <div
-                style={{ backgroundColor: colour }}
-                className={
-                  colourCode === colour ? 'radio-button-on' : 'radio-button-off'
-                }
-                onClick={() => setColourCode(colour)}
-              />
-            </div>
-          ))}
-        </div>
-        {error}
-        <br />
-        <button className='new-task-button' id='Submit' type='submit'>
-          Create Label
-        </button>
-      </form>
+    <div className='label-form-container'>
+      <div className='field-section'>
+        <TextField
+          id='labelName'
+          type='text'
+          placeholder='Label Name'
+          className='text-field'
+          onChange={(e) => setName(e.target.value)}
+        />
+        <TextField
+          id='labelDescription'
+          type='text'
+          placeholder='Label Description'
+          className='text-field'
+          onChange={(e) => setDescription(e.target.value)}
+        />
+      </div>
+      Select Tag
+      <div className='label-colour-tag-container'>
+        {colours.map((colour) => (
+          <div className='radio-button-container'>
+            <div
+              style={{ backgroundColor: colour }}
+              className={
+                colourCode === colour ? 'radio-button-on' : 'radio-button-off'
+              }
+              onClick={() => setColourCode(colour)}
+            />
+          </div>
+        ))}
+      </div>
+      {error}
+      <button className='new-task-button' onClick={handleSubmit}>
+        Create Label
+      </button>
     </div>
   );
 };

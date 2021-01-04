@@ -20,18 +20,23 @@ const LabelsTab = ({ labels, setLabels }) => {
 
   const labelForm = toggleForm && (
     <div>
-      <LabelForm
-        setToggleLabelForm={() => setToggleForm((prevState) => !prevState)}
-        labels={labels}
-        setLabels={setLabels}
+      <div
+        className='modal-background'
+        onClick={() => setToggleForm((prevState) => !prevState)}
       />
+      <div className='form-modal'>
+        <LabelForm
+          setToggleLabelForm={() => setToggleForm((prevState) => !prevState)}
+          labels={labels}
+          setLabels={setLabels}
+        />
+      </div>
     </div>
   );
 
   return (
     <div className='tab-container'>
       {labelForm}
-      <br/>
       <div className='tracking-navbar'>
         <div className='heading'>Labels</div>
         <div

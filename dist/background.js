@@ -1,24 +1,23 @@
 /*global chrome*/
 
 chrome.runtime.onStartup.addListener(() => {
-  chrome.storage.sync.get({
+  chrome.storage.local.get({
     currTasks: [],
-    pastTasks: [],
     totalTime: 0,
-  }, ({currTasks, pastTasks, totalTime}) => {
-      chrome.storage.sync.set(
-        { currTasks: currTasks, pastTasks: pastTasks, totalTime: totalTime }
+  }, ({currTasks, totalTime}) => {
+      chrome.storage.local.set(
+        { currTasks: currTasks, totalTime: totalTime }
       );
   });
 });
 
 setInterval(() => {
-  chrome.storage.sync.get(
+  chrome.storage.local.get(
     ['currTasks', 'totalTime'],
     ({ currTasks, totalTime }) => {
       console.log(currTasks);
       console.log(totalTime);
-      chrome.storage.sync.set({
+      chrome.storage.local.set({
         currTasks: currTasks.map((task) => {
           if (task.onPlay) {
             task.time++;
@@ -27,7 +26,7 @@ setInterval(() => {
         }),
       });
       if (currTasks.filter((task) => task.onPlay).length > 0) {
-        chrome.storage.sync.set({ totalTime: totalTime + 1 });
+        chrome.storage.local.set({ totalTime: totalTime + 1 });
       }
     }
   );

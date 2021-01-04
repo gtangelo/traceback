@@ -15,7 +15,7 @@ const retrieveCurrTasks = (setCurrTasks) => {
         (a, b) => b['start'] - a['start']
       );
       setCurrTasks(tasksList);
-      chrome.storage.sync.set({ currTasks: tasksList });
+      chrome.storage.local.set({ currTasks: tasksList });
     })
     .catch((e) => console.log(e));
 };

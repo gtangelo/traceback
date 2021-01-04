@@ -13,7 +13,7 @@ const retrievePastTasks = (setPastTasks) => {
     .then(({ data }) => {
       const tasksList = data['tasks_list'].sort((a, b) => b['start'] - a['start']);
       setPastTasks(tasksList);
-      chrome.storage.sync.set({ pastTasks: tasksList });
+      // chrome.storage.local.set({ pastTasks: tasksList });
     })
     .catch((e) => console.log(e));
 };

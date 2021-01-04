@@ -31,7 +31,7 @@ const CurrTaskTab = ({
   const taskForm = toggleForm && (
     <div>
       <TaskForm
-        ToggleTaskForm={() => setToggleForm((prevState) => !prevState)}
+        setToggleForm={setToggleForm}
         labels={labels}
         setLabels={setLabels}
         setCurrTasks={setCurrTasks}

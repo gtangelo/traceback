@@ -8,12 +8,13 @@ import LabelIDToName from 'utils/helpers/LabelIDToName';
 import updateTaskDatabase from 'utils/helpers/updateTaskDatabase';
 
 import {
-  AiFillPlayCircle,
-  AiFillPauseCircle,
-  AiFillDelete,
-  AiOutlineCheck,
-  AiOutlineInfo,
-} from 'react-icons/ai';
+  FaInfo,
+  FaPlayCircle,
+  FaPauseCircle,
+  FaLongArrowAltRight,
+  FaBackspace,
+} from 'react-icons/fa';
+
 
 import { Tooltip } from '@material-ui/core';
 import TaskInfoModal from 'components/TaskInfoModal';
@@ -24,31 +25,27 @@ import SpliceArrayByDay from 'utils/helpers/SpliceArrayByDay';
 import retrieveCurrTasks from 'utils/helpers/retrieveCurrTasks';
 import retrievePastTasks from 'utils/helpers/retrievePastTasks';
 import syncCurrTasks from 'utils/helpers/syncCurrTasks';
+import ConvertTimestampToDay from 'utils/helpers/ConvertTimestampToDay';
 
-const TasksList = ({
-  tasksList,
-  totalTime,
+
+const TaskItem = ({
+  task,
   labels,
   tab,
-  setCurrTasks,
-  setPastTasks,
   showDelete,
   showFinish,
-  showInfo,
-  showDate,
-  showToday,
-  showTime,
+  setCurrTasks,
+  setPastTasks,
 }) => {
   const [toggleInfo, setToggleInfo] = useState(false);
-  const [timeLogs, setTimeLogs] = useState([]);
 
   const PlayPauseTask = (task) => {
     if (task.onPlay) {
       updateTaskDatabase(task['userID'], task['taskID'], task['time']);
       console.log('updated task');
     }
-    chrome.storage.sync.get('currTasks', ({ currTasks }) => {
-      chrome.storage.sync.set({
+    chrome.storage.local.get('currTasks', ({ currTasks }) => {
+      chrome.storage.local.set({
         currTasks: currTasks.map((item) =>
           item.taskID === task.taskID ? { ...item, onPlay: !task.onPlay } : item
         ),
@@ -56,7 +53,7 @@ const TasksList = ({
     });
   };
 
-  const DeleteTask = async (taskID) => {
+  const DeleteTask = (taskID) => {
     syncCurrTasks(setCurrTasks);
     axios
       .delete('/active-task/delete', {
@@ -86,26 +83,100 @@ const TasksList = ({
       .catch((e) => console.log(e));
   };
 
+  return (
+    <div>
+      <div className={!toggleInfo ? 'hidden' : ''}>
+        <TaskInfoModal
+          setToggleInfo={setToggleInfo}
+          task={task}
+          labels={labels}
+        />
+      </div>
+      <div className='task-item-container'>
+        <div
+          className='task-name-container'
+          onClick={() => setToggleInfo((prevState) => !prevState)}
+        >
+          <Tooltip
+            title={LabelIDToName(labels, task.labelID)}
+            arrow
+            placement='top'
+          >
+            <div
+              className='task-colour'
+              style={{
+                backgroundColor: LabelIDToColour(labels, task.labelID),
+              }}
+            >
+              <FaInfo size='12px' color='#333333' />
+            </div>
+          </Tooltip>
+          <div className='task-name'>{task.name}</div>
+        </div>
+        {tab === CURRENT_TASK_TAB ? (
+          <div className='buttons-container'>
+            <Tooltip title='Play/Pause' arrow placement='top'>
+              <div className='play-button' onClick={() => PlayPauseTask(task)}>
+                {!task.onPlay ? (
+                  <FaPlayCircle size='16px' color='#333333' />
+                ) : (
+                  <FaPauseCircle size='16px' color='#333333' />
+                )}
+                <h5>{ClockConverter(task.time)}</h5>
+              </div>
+            </Tooltip>
+
+            {showDelete && (
+              <Tooltip title='Delete' arrow placement='top'>
+                <div
+                  className='circle-button'
+                  onClick={() => DeleteTask(task.taskID)}
+                >
+                  <FaBackspace size='16px' color='#333333' />
+                </div>
+              </Tooltip>
+            )}
+            {showFinish && (
+              <Tooltip title='Finish' arrow placement='top'>
+                <div
+                  className='circle-button'
+                  onClick={() => FinishTask(task.taskID, task.time)}
+                  AiOutlineCheck
+                >
+                  <FaLongArrowAltRight size='16px' color='#333333' />
+                </div>
+              </Tooltip>
+            )}
+          </div>
+        ) : (
+          <div className='buttons-container'>
+            <Tooltip title='Time' arrow placement='top'>
+              <div className='play-button'>
+                <h5>{ClockConverter(task.time)}</h5>
+              </div>
+            </Tooltip>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+const TasksList = ({
+  tasksList,
+  totalTime,
+  labels,
+  tab,
+  setCurrTasks,
+  setPastTasks,
+  showDelete,
+  showFinish,
+  showDate,
+  showToday,
+  showTime,
+}) => {
+  const [timeLogs, setTimeLogs] = useState([]);
   const tasksDayList = SpliceArrayByDay(tasksList);
-
-  const ConvertDateToDay = (taskDatetime) => {
-    const taskDate = new Date(0);
-    taskDate.setUTCSeconds(taskDatetime);
-    taskDate.setHours(0, 0, 0, 0);
-    const todayDate = new Date();
-    todayDate.setHours(0, 0, 0, 0);
-
-    const yesterdayDate = new Date(todayDate);
-    yesterdayDate.setDate(yesterdayDate.getDate() - 1);
-
-    if (todayDate.getTime() === taskDate.getTime()) {
-      return 'Today';
-    } else if (yesterdayDate.getTime() === taskDate.getTime()) {
-      return 'Yesterday';
-    } else {
-      return taskDate.toDateString();
-    }
-  };
 
   const DisplayTotalTime = (time_logs, date_timestamp) => {
     let time = 0;
@@ -142,7 +213,7 @@ const TasksList = ({
       .catch((e) => console.log(e));
   }, []);
 
-  const validateDate = () => {
+  const ValidateDate = () => {
     if (
       !showDate ||
       !showToday ||
@@ -166,7 +237,7 @@ const TasksList = ({
 
   return (
     <div className='task-list-section'>
-      {validateDate() && (
+      {ValidateDate() && (
         <div className='day-container'>
           <div className='sub-heading'>Today</div>
           <div>{ClockConverter(totalTime)}</div>
@@ -177,7 +248,7 @@ const TasksList = ({
           {showDate && (
             <div className='day-container'>
               <div className='sub-heading'>
-                {ConvertDateToDay(tasks[0]['start'])}
+                {ConvertTimestampToDay(tasks[0]['start'])}
               </div>
               {showTime && (
                 <div>{DisplayTotalTime(timeLogs, tasks[0]['start'])}</div>
@@ -185,83 +256,8 @@ const TasksList = ({
             </div>
           )}
           {tasks.map((task, i) => (
-            <div key={i}>
-              <div className={!toggleInfo ? 'hidden' : ''}>
-                <TaskInfoModal
-                  ToggleTaskInfo={() =>
-                    setToggleInfo((prevState) => !prevState)
-                  }
-                  task={task}
-                />
-              </div>
-              <div className='task-item-container'>
-                <div className='task-name-container'>
-                  <Tooltip title={LabelIDToName(labels, task.labelID)} arrow>
-                    <div
-                      className='task-colour'
-                      style={{
-                        backgroundColor: LabelIDToColour(labels, task.labelID),
-                      }}
-                    />
-                  </Tooltip>
-                  <div className='task-name'>{task.name}</div>
-                </div>
-                {tab === CURRENT_TASK_TAB ? (
-                  <div className='buttons-container'>
-                    <div
-                      className='play-button'
-                      onClick={() => PlayPauseTask(task)}
-                    >
-                      {!task.onPlay ? (
-                        <AiFillPlayCircle size='20px' color='#333333' />
-                      ) : (
-                        <AiFillPauseCircle size='20px' color='#333333' />
-                      )}
-                      <h5>{ClockConverter(task.time)}</h5>
-                    </div>
-                    {showDelete && (
-                      <div
-                        className='circle-button'
-                        onClick={() => DeleteTask(task.taskID)}
-                      >
-                        <AiFillDelete size='20px' color='#333333' />
-                      </div>
-                    )}
-                    {showFinish && (
-                      <div
-                        className='circle-button'
-                        onClick={() => FinishTask(task.taskID, task.time)}
-                        AiOutlineCheck
-                      >
-                        <AiOutlineCheck size='20px' color='#333333' />
-                      </div>
-                    )}
-                    {showInfo && (
-                      <div
-                        className='circle-button'
-                        onClick={() => setToggleInfo((prevState) => !prevState)}
-                      >
-                        <AiOutlineInfo size='20px' color='#333333' />
-                      </div>
-                    )}
-                  </div>
-                ) : (
-                  <div className='buttons-container'>
-                    <div className='play-button'>
-                      <h5>{ClockConverter(task.time)}</h5>
-                    </div>
-                    {showInfo && (
-                      <div
-                        className='circle-button'
-                        onClick={() => setToggleInfo((prevState) => !prevState)}
-                      >
-                        <AiOutlineInfo size='20px' color='#333333' />
-                      </div>
-                    )}
-                  </div>
-                )}
-              </div>
-            </div>
+            <TaskItem task={task} labels={labels} tab={tab} showFinish={showFinish} showDelete={showDelete}
+              setCurrTasks={setCurrTasks} setPastTasks={setPastTasks}/>
           ))}
         </div>
       ))}

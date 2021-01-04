@@ -17,6 +17,15 @@
   align-items: center;
 }
 
+.task-colour {
+  width: 20px;
+  height: 20px;
+  border-radius: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .circle-button:hover, .play-button:hover, .new-task-button:hover {
   cursor: pointer;
 }
@@ -38,7 +47,7 @@
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  gap: 5px;
+  gap: 7px;
 }
 
 .task-name-container {
@@ -46,6 +55,11 @@
   justify-content: flex-start;
   align-items: center;
   gap: 10px;
+  width: auto;
+}
+
+.task-name-container:hover {
+  cursor: pointer;
 }
 
 .day-container {

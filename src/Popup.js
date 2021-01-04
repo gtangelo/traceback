@@ -36,7 +36,7 @@ const Popup = () => {
   // Furthermore, it fetches the total time spent of recording tasks for 
   // previous days.
   useEffect(() => {
-    chrome.storage.sync.get('currTasks', (payload) => {
+    chrome.storage.local.get('currTasks', (payload) => {
       if (payload.currTasks.length > 0) {
         axios
           .put('/active-tasks/sync', {
@@ -47,7 +47,7 @@ const Popup = () => {
         retrieveCurrTasks(setCurrTasks);
       }
       retrievePastTasks(setPastTasks);
-      retrieveLabels();
+      retrieveLabels(setLabels);
     });
   }, []);
 
@@ -55,7 +55,7 @@ const Popup = () => {
   // in chrome storage since background.js updates the time of tasks and stores 
   // the result in chrome storage.
   useInterval(() => {
-    chrome.storage.sync.get(
+    chrome.storage.local.get(
       ['currTasks', 'pastTasks', 'totalTime'],
       (payload) => {
         setCurrTasks(payload.currTasks);
