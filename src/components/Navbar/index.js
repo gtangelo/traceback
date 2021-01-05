@@ -28,13 +28,13 @@ const Navbar = ({ tab, setTab }) => {
     searchTab = "on"
   }
 
-    const Reset = () => {
-      chrome.storage.local.set({
-        currTasks: [],
-        totalTime: 0,
-      });
-      chrome.storage.local.remove(["lastUsed"])
-    };
+  const Reset = () => {
+    chrome.storage.local.set({
+      currTasks: [],
+      totalTime: 0,
+    });
+    chrome.storage.local.remove(["lastUsed"])
+  };
 
   return (
     <nav>

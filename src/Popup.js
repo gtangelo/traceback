@@ -1,14 +1,14 @@
 /* global chrome */
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import './axios'
+import './axios';
 
 import useInterval from 'utils/hooks/useInterval';
 import { CURRENT_TASK_TAB, PAST_TASK_TAB, LABELS_TAB, SEARCH_TAB } from 'utils/constants';
 
 import Navbar from 'components/Navbar/';
 
-import './Popup.css'
+import './Popup.css';
 import LabelsTab from 'tabs/LabelsTab';
 import SearchTab from 'tabs/SearchTab';
 import CurrTaskTab from 'tabs/CurrTaskTab';
@@ -23,7 +23,7 @@ const Popup = () => {
   const [pastTasks, setPastTasks] = useState([]);
   const [currTasks, setCurrTasks] = useState([]);
   const [labels, setLabels] = useState([]);
-  const [play, setPlay] = useState(null)
+  const [play, setPlay] = useState(null);
 
   // For every time the popup is clicked, make an initial API call depending on
   // the context.
@@ -37,14 +37,14 @@ const Popup = () => {
   // previous days.
   useEffect(() => {
     chrome.storage.local.get(["lastUsed"], ({ lastUsed }) => {
-      console.log(lastUsed)
+      console.log(lastUsed);
       const todayDate = new Date();
       todayDate.setHours(0, 0, 0, 0);
       lastUsed.setHours(0, 0, 0, 0);
       if (lastUsed.getTime() !== todayDate.getTime()) {
-        chrome.storage.local.set({totalTime: 0})
+        chrome.storage.local.set({totalTime: 0});
       }
-      chrome.storage.local.set({lastUsed: new Date()})
+      chrome.storage.local.set({lastUsed: new Date()});
     });
 
     chrome.storage.local.get('currTasks', (payload) => {
@@ -73,7 +73,7 @@ const Popup = () => {
         setCurrTasks(payload.currTasks);
         setTotalTime(payload.totalTime);
         let status = payload.currTasks.filter((task) => task.onPlay).length > 0;
-        setPlay(status)
+        setPlay(status);
       }
     );
   }, 1000);
@@ -149,6 +149,6 @@ const Popup = () => {
       {currTab}
     </div>
   );
-}
+};
 
 export default Popup;
