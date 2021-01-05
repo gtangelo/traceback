@@ -36,15 +36,33 @@ const Popup = () => {
   // Furthermore, it fetches the total time spent of recording tasks for 
   // previous days.
   useEffect(() => {
-    chrome.storage.local.get(["lastUsed"], ({ lastUsed }) => {
-      console.log(lastUsed);
+    chrome.storage.local.get(["lastUsed", "totalTime"], ({ lastUsed, totalTime }) => {
+      let lastDate = lastUsed;
       const todayDate = new Date();
       todayDate.setHours(0, 0, 0, 0);
-      lastUsed.setHours(0, 0, 0, 0);
-      if (lastUsed.getTime() !== todayDate.getTime()) {
-        chrome.storage.local.set({totalTime: 0});
+      try {
+        lastDate.setHours(0, 0, 0, 0);
+      } catch {
+        lastDate = todayDate;
       }
-      chrome.storage.local.set({lastUsed: new Date()});
+      if (lastDate.getTime() !== todayDate.getTime()) {
+        chrome.storage.local.set({ totalTime: 0 });
+      } else if (totalTime === 0) {
+        axios
+          .get('/time-logs/retrieve', {
+            params: {
+              userID: 1,
+            },
+          })
+          .then(({ data }) => {
+            const timeLogs = data['time_logs'].sort((a, b) => b.date - a.date);
+            if (timeLogs.length > 0) {
+              chrome.storage.local.set({ totalTime: timeLogs[0]['time'] });
+            }
+          })
+          .catch((e) => console.log(e));
+      }
+      chrome.storage.local.set({ lastUsed: new Date() });
     });
 
     chrome.storage.local.get('currTasks', (payload) => {
