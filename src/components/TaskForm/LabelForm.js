@@ -1,24 +1,20 @@
-import React, {useState} from 'react';
-import { TextField } from '@material-ui/core';
-import './index.css';
+import React, { useState } from 'react';
 import axios from 'axios';
+import './index.css';
+import { FaPlus } from 'react-icons/fa';
+import { TextField } from '@material-ui/core';
+import { AddButton, ColourButton } from 'components/Button';
+import { SubHeading } from 'components/Title';
+import GenerateLinearGradient from 'utils/helpers/GenerateLinearGradient';
 import colours from 'utils/colours';
 
 const LabelForm = ({ setLabels, setToggleLabelForm }) => {
-  const [error, setError] = useState("")
+  const [error, setError] = useState("");
   const [colourCode, setColourCode] = useState(null);
-  const [name, setName] = useState("")
+  const [name, setName] = useState("");
 
   const handleSubmit = () => {
-    // form fields validation
-    if (colourCode === null) {
-      setError('Colour tag must be selected');
-    }
-    if (name.length <= 0) {
-      setError('Label must be greater than 0 characters');
-    }
-
-    // api request to create a new label
+    // API post request to create a new label to be sent in the dynamodb database
     if (name.length > 0 && colourCode != null) {
       setToggleLabelForm((prevState) => !prevState);
       axios
@@ -37,42 +33,52 @@ const LabelForm = ({ setLabels, setToggleLabelForm }) => {
               colour: colourCode,
             },
           ]);
-          setName("")
-          setColourCode(null)
+          setName("");
+          setColourCode(null);
         })
         .catch((e) => console.log(e));
+    } else {
+      setError("Missing Fields");
+      if (colourCode === null) {
+        setError('Colour tag must be selected');
+      }
+      if (name.length <= 0) {
+        setError('Label must be greater than 0 characters');
+      }
     }
   };
 
+  console.log(GenerateLinearGradient(colours[0]));
   return (
-    <div className='label-form-container'>
-      <div className='field-section'>
-        <TextField
-          id='labelName'
-          type='text'
-          placeholder='Label Name'
-          className='text-field'
-          onChange={(e) => setName(e.target.value)}
-        />
-      </div>
-      Select Tag
-      <div className='label-colour-tag-container'>
+    <div style={{ width: '100%' }}>
+      <TextField
+        id='labelName'
+        type='text'
+        placeholder='Label Name'
+        className='text-field'
+        onChange={(e) => setName(e.target.value)}
+      />
+      <br />
+      <SubHeading dark>Select Colour</SubHeading>
+      <div className='label-colours-section'>
         {colours.map((colour) => (
-          <div className='radio-button-container'>
-            <div
-              style={{ backgroundColor: colour }}
+          <div className='radio-btn-container'>
+            <ColourButton
+              colour={GenerateLinearGradient(colour)}
               className={
-                colourCode === colour ? 'radio-button-on' : 'radio-button-off'
+                colourCode === colour ? 'radio-btn-on' : 'radio-btn-off'
               }
+              selected={colourCode === colour}
               onClick={() => setColourCode(colour)}
             />
           </div>
         ))}
       </div>
       {error}
-      <button className='new-task-button' onClick={handleSubmit}>
-        Create Label
-      </button>
+      <AddButton onClick={handleSubmit} style={{float: 'right'}}>
+        <FaPlus size='12px' color='#333333' />
+        <h5>Create Label</h5>
+      </AddButton>
     </div>
   );
 };

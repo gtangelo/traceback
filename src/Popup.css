@@ -7,40 +7,6 @@
   font-size: 14px;
 }
 
-.tab-container {
-  width: 400px;
-  height: 100%;
-  padding: 15px 25px;
-  background-color: #333333;
-  color: #e0e0e0;
-  overflow: auto;
-}
-
-.sub-heading {
-  font-size: 16px;
-  color: #bdbdbd;
-  margin-bottom: 5px;
-  font-weight: bold;
-}
-
-.heading {
-  font-size: 20px;
-  color: #bdbdbd;
-  margin-bottom: 10px;
-  font-weight: bolder;
-}
-
-.task-name {
-  font-weight: bolder;
-  font-size: 14px;
-}
-
 .hidden {
   display: none;
-}
-
-.flex-container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }

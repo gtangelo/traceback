@@ -3,10 +3,17 @@ import axios from 'axios';
 import TimeField from 'react-simple-timefield';
 import { FormControlLabel, Switch, TextField, Tooltip } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
-import cancelBtn from 'images/deleteIcon.png';
 import './index.css';
 import LabelForm from './LabelForm';
 import syncCurrTasks from 'utils/helpers/syncCurrTasks';
+import { ModalBackground, FormModal } from 'components/Modal';
+import { CircleButton, AddButton, ColourButton } from 'components/Button';
+
+import { FaTimes } from 'react-icons/fa';
+import { SubHeading } from 'components/Title/';
+import { TabHeader } from 'components/TabContainer';
+import GenerateLinearGradient from 'utils/helpers/GenerateLinearGradient';
+import { FaPlus } from 'react-icons/fa';
 
 const TaskForm = ({ setToggleForm, labels, setLabels, setCurrTasks }) => {
   const [labelID, setLabelID] = useState(0);
@@ -14,8 +21,8 @@ const TaskForm = ({ setToggleForm, labels, setLabels, setCurrTasks }) => {
   const [error, setError] = useState('');
   const [time, setTime] = useState('00:00:00');
   const [disable, setDisable] = useState(false);
-  const [name, setName] = useState("")
-  const [description, setDescription] = useState("")
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
 
   // Add a new task to both dynamodb database and local state
   const handleSubmit = () => {
@@ -26,13 +33,6 @@ const TaskForm = ({ setToggleForm, labels, setLabels, setCurrTasks }) => {
       parseInt(timeFields[2]);
 
     // form fields validation
-    if (description.length <= 0) {
-      setError('Description must be greater than 0 characters');
-    }
-    if (name.length <= 0) {
-      setError('Label must be greater than 0 characters');
-    }
-
     if (name.length > 0 && description.length > 0) {
       setToggleForm(prevState => !prevState);
       axios
@@ -45,34 +45,37 @@ const TaskForm = ({ setToggleForm, labels, setLabels, setCurrTasks }) => {
         })
         .then(() => {
           syncCurrTasks(setCurrTasks);
-          setName("")
-          setDescription("")
+          setName("");
+          setDescription("");
         })
         .catch((e) => console.log(e));
     } else {
       setError('Missing Fields');
+      if (description.length <= 0) {
+        setError('Description must be greater than 0 characters');
+      }
+      if (name.length <= 0) {
+        setError('Label must be greater than 0 characters');
+      }
     }
   };
 
   return (
     <div>
-      <div
-        className='modal-background'
+      <ModalBackground
         onClick={() => setToggleForm((prevState) => !prevState)}
       />
-      <div className='form-modal'>
-        <div className='tracking-navbar'>
-          <div className='sub-heading'>Create New Task</div>
-          <img
-            className='button-img'
-            src={cancelBtn}
-            alt='Exit'
+      <FormModal>
+        <TabHeader>
+          <SubHeading dark>Create New Task</SubHeading>
+          <CircleButton
             onClick={() => setToggleForm((prevState) => !prevState)}
-          />
-        </div>
-        {/* <form onSubmit={handleSubmit}> */}
+          >
+            <FaTimes size='16px' color='#333333' />
+          </CircleButton>
+        </TabHeader>
         <br />
-        <div className='field-section'>
+        <TabHeader>
           <TextField
             id='taskName'
             label='Task Name'
@@ -97,9 +100,9 @@ const TaskForm = ({ setToggleForm, labels, setLabels, setCurrTasks }) => {
             }}
             onChange={(e) => setDescription(e.target.value)}
           />
-        </div>
+        </TabHeader>
         <br />
-        <div className='field-section'>
+        <TabHeader>
           <div className='text-field flex-container'>
             <FormControlLabel
               control={
@@ -113,48 +116,46 @@ const TaskForm = ({ setToggleForm, labels, setLabels, setCurrTasks }) => {
               label='Set Time'
             />
           </div>
-          <div>
-            <TimeField
-              value='00:00:00'
-              input={
-                <TextField
-                  label='Time'
-                  id='time'
-                  variant='outlined'
-                  size='small'
-                  className='text-field'
-                  disabled={!disable}
-                />
-              }
-              onChange={(e) => setTime(e.target.value)}
-              showSeconds={true}
-            />
-          </div>
-        </div>
-        <div className='sub-heading'>Labels Selection</div>
-        <div className='label-selection'>
-          <div className='label-selection-row'>
-            <div className='label-selection-container'>
-              <Tooltip title='None' arrow>
-                <div className='radio-button-container'>
-                  <div
-                    style={{ backgroundColor: '#eeeeee' }}
-                    className={
-                      labelID === 0 ? 'radio-button-on' : 'radio-button-off'
-                    }
+          <TimeField
+            value='00:00:00'
+            input={
+              <TextField
+                label='Time'
+                id='time'
+                variant='outlined'
+                size='small'
+                className='text-field'
+                disabled={!disable}
+              />
+            }
+            onChange={(e) => setTime(e.target.value)}
+            showSeconds={true}
+          />
+        </TabHeader>
+        <SubHeading dark>Labels Selection</SubHeading>
+        <div className='label-selection-container'>
+          <div className='labels-section'>
+            <div className='label-selection'>
+              <Tooltip title='None' arrow placement='top'>
+                <div className='radio-btn-container'>
+                  <ColourButton
+                    colour={GenerateLinearGradient('#eeeeee')}
+                    selected={labelID === 0}
+                    className={labelID === 0 ? 'radio-btn-on' : 'radio-btn-off'}
                     onClick={() => setLabelID(0)}
                   />
                 </div>
               </Tooltip>
               {labels.map((label, i) => (
-                <Tooltip title={label.name} arrow>
-                  <div className='radio-button-container'>
-                    <div
-                      style={{ backgroundColor: label.colour }}
+                <Tooltip title={label.name} arrow placement='top'>
+                  <div className='radio-btn-container'>
+                    <ColourButton
+                      colour={GenerateLinearGradient(label.colour)}
+                      selected={labelID === label.labelID}
                       className={
                         labelID === label.labelID
-                          ? 'radio-button-on'
-                          : 'radio-button-off'
+                          ? 'radio-btn-on'
+                          : 'radio-btn-off'
                       }
                       key={i}
                       onClick={() => setLabelID(label.labelID)}
@@ -164,18 +165,19 @@ const TaskForm = ({ setToggleForm, labels, setLabels, setCurrTasks }) => {
               ))}
             </div>
             <div id='add-label-button'>
-              <Tooltip title='Add Label' arrow>
-                <div
-                  style={{ backgroundColor: '#eeeeee' }}
-                  className='radio-button-on'
+              <Tooltip title='Add Label' arrow placement='top'>
+                <ColourButton
+                  colour={GenerateLinearGradient('#eeeeee')}
+                  className='radio-btn-on'
+                  selected
                   onClick={() => setToggleLabelForm((prevState) => !prevState)}
                 >
-                  <AddIcon style={{ color: '#000000' }} />
-                </div>
+                  <FaPlus color='#333333' size='12px' />
+                </ColourButton>
               </Tooltip>
             </div>
           </div>
-          <div className={toggleLabelForm ? 'label-form' : 'hidden'}>
+          <div className={toggleLabelForm ? 'display-form' : 'hide-form'}>
             <LabelForm
               labels={labels}
               setLabels={setLabels}
@@ -185,16 +187,11 @@ const TaskForm = ({ setToggleForm, labels, setLabels, setCurrTasks }) => {
         </div>
         <br />
         {error}
-        <button
-          className='new-task-button'
-          id='Submit'
-          type='submit'
-          onClick={handleSubmit}
-        >
-          Add Task
-        </button>
-        {/* </form> */}
-      </div>
+        <AddButton onClick={handleSubmit} style={{ float: 'right' }}>
+          <FaPlus size='12px' color='#333333' />
+          <h5>Create Task</h5>
+        </AddButton>
+      </FormModal>
     </div>
   );
 };

@@ -1,15 +1,25 @@
-import axios from 'axios';
-import LabelForm from 'components/TaskForm/LabelForm';
 import React, { useState } from 'react';
-import { AiOutlinePlus } from 'react-icons/ai';
-import { FaBackspace } from 'react-icons/fa';
-import LabelIDToColour from 'utils/helpers/LabelIDToColour';
+import axios from 'axios';
+import { FaBackspace, FaPlusCircle } from 'react-icons/fa';
 
+import LabelForm from 'components/TaskForm/LabelForm';
+
+import { ModalBackground, FormModal } from 'components/Modal';
+import { TabContainer, TabHeader } from 'components/TabContainer';
+import { Heading } from 'components/Title';
+import { ItemContainer, ItemNameSection, ItemButtonSection } from 'components/Container';
+import { TaskButton, TooltipButton, CircleButton, AddButton } from 'components/Button';
+
+import LabelIDToColour from 'utils/helpers/LabelIDToColour';
 import retrieveLabels from 'utils/helpers/retrieveLabels';
+import GenerateLinearGradient from 'utils/helpers/GenerateLinearGradient';
+
 
 const LabelsTab = ({ labels, setLabels }) => {
-  const [toggleForm, setToggleForm] = useState(false)
+  const [toggleForm, setToggleForm] = useState(false);
 
+  // API delete request to delete the specified label in the dynamodb database 
+  // and local state
   const DeleteLabel = labelID => {
     axios.delete('/label/delete', {
       params: {
@@ -17,78 +27,69 @@ const LabelsTab = ({ labels, setLabels }) => {
         labelID: labelID
       }
     }).then(() => {
-      retrieveLabels(setLabels)
-    }).catch(e => console.log(e))
-  }
-
-  const labelForm = toggleForm && (
-    <div>
-      <div
-        className='modal-background'
-        onClick={() => setToggleForm((prevState) => !prevState)}
-      />
-      <div className='form-modal'>
-        <LabelForm
-          setToggleLabelForm={() => setToggleForm((prevState) => !prevState)}
-          labels={labels}
-          setLabels={setLabels}
-        />
-      </div>
-    </div>
-  );
+      retrieveLabels(setLabels);
+    }).catch(e => console.log(e));
+  };
 
   return (
-    <div className='tab-container'>
-      {labelForm}
-      <div className='tracking-navbar'>
-        <div className='heading'>Labels</div>
-        <div
-          className='new-task-button'
-          onClick={() => setToggleForm((prevState) => !prevState)}
-        >
-          <AiOutlinePlus size='20px' color='#333333' />
-          <h5>Add Label</h5>
+    <TabContainer>
+      {toggleForm && (
+        <div>
+          <ModalBackground
+            onClick={() => setToggleForm((prevState) => !prevState)}
+          />
+          <FormModal>
+            <LabelForm
+              setToggleLabelForm={() =>
+                setToggleForm((prevState) => !prevState)
+              }
+              labels={labels}
+              setLabels={setLabels}
+            />
+          </FormModal>
         </div>
-      </div>
+      )}
+      <TabHeader>
+        <Heading>Labels</Heading>
+        <AddButton onClick={() => setToggleForm((prevState) => !prevState)}>
+          <FaPlusCircle size='20px' color='#333333' />
+          <h5>Add Label</h5>
+        </AddButton>
+      </TabHeader>
       <br />
       <div>
-        <div className='task-item-container'>
-          <div className='task-name-container'>
-            <div
-              className='task-colour'
-              style={{
-                backgroundColor: LabelIDToColour(labels, 0),
-              }}
+        <ItemContainer>
+          <ItemNameSection>
+            <TaskButton
+              colour={GenerateLinearGradient(LabelIDToColour(labels, 0))}
             />
             <div className='task-name'>None</div>
-          </div>
-        </div>
+          </ItemNameSection>
+        </ItemContainer>
       </div>
       {labels.map((label, i) => (
-        <div key={i}>
-          <div className='task-item-container'>
-            <div className='task-name-container'>
-              <div
-                className='task-colour'
-                style={{
-                  backgroundColor: label.colour,
-                }}
-              />
-              <div className='task-name'>{label.name}</div>
-            </div>
-            <div className='buttons-container'>
-              <div
-                className='circle-button'
-                onClick={() => DeleteLabel(label.labelID)}
-              >
-                <FaBackspace size='16px' color='#333333' />
-              </div>
-            </div>
-          </div>
-        </div>
+        <ItemContainer key={i}>
+          <ItemNameSection>
+            <TaskButton
+              colour={GenerateLinearGradient(
+                LabelIDToColour(labels, label.labelID)
+              )}
+            />
+            <div className='task-name'>{label.name}</div>
+          </ItemNameSection>
+          <ItemButtonSection>
+            <TooltipButton
+              title='Delete'
+              button={CircleButton}
+              onClick={() => DeleteLabel(label.labelID)}
+            >
+              <FaBackspace size='16px' color='#333333' />
+            </TooltipButton>
+          </ItemButtonSection>
+        </ItemContainer>
       ))}
-    </div>
+    </TabContainer>
   );
-}
+};
 
-export default LabelsTab
+export default LabelsTab;

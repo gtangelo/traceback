@@ -1,8 +1,12 @@
-import { TextField, Tooltip } from '@material-ui/core';
 import React, { useState } from 'react';
+import { TextField, Tooltip } from '@material-ui/core';
 import TasksList from 'components/TasksList';
 import { CURRENT_TASK_TAB, PAST_TASK_TAB } from 'utils/constants';
-
+import { TabContainer, TabHeader } from 'components/TabContainer';
+import { Heading } from 'components/Title';
+import GenerateLinearGradient from 'utils/helpers/GenerateLinearGradient';
+import { ColourButton } from 'components/Button';
+import 'components/TaskForm/index.css';
 
 const SearchTab = ({
   labels,
@@ -14,7 +18,7 @@ const SearchTab = ({
   const [labelID, setLabelID] = useState(-1);
   const [search, setSearch] = useState('');
 
-  let currTasksFiltered = currTasks
+  let currTasksFiltered = currTasks;
   if (labelID !== -1) {
     currTasksFiltered = currTasks.filter(
       (task) => task.labelID === labelID
@@ -38,9 +42,9 @@ const SearchTab = ({
   );
 
   return (
-    <div className='tab-container'>
-      <div className='tracking-navbar'>
-        <div className='heading'>Search</div>
+    <TabContainer>
+      <TabHeader>
+        <Heading>Search</Heading>
         <TextField
           label='Search Task Name'
           id='search'
@@ -52,43 +56,40 @@ const SearchTab = ({
           }}
           onChange={(e) => setSearch(e.target.value)}
         />
-      </div>
-      <br/>
+      </TabHeader>
       {search === '' ? (
-        <>
-          {' '}
-          <div className='label-colour-tag-container'>
-            <Tooltip title='All' arrow>
-              <div className='radio-button-container'>
-                <div
-                  style={{ backgroundColor: '#000000' }}
-                  className={
-                    labelID === -1 ? 'radio-button-on' : 'radio-button-off'
-                  }
+        <div>
+          <div className='label-selection'>
+            <Tooltip title='All' arrow placement='top'>
+              <div className='radio-btn-container'>
+                <ColourButton
+                  colour={GenerateLinearGradient('#000000')}
+                  selected={labelID === -1}
+                  className={labelID === -1 ? 'radio-btn-on' : 'radio-btn-off'}
                   onClick={() => setLabelID(-1)}
                 />
               </div>
             </Tooltip>
-            <Tooltip title='None' arrow>
-              <div className='radio-button-container'>
-                <div
-                  style={{ backgroundColor: '#eeeeee' }}
-                  className={
-                    labelID === 0 ? 'radio-button-on' : 'radio-button-off'
-                  }
+            <Tooltip title='None' arrow placement='top'>
+              <div className='radio-btn-container'>
+                <ColourButton
+                  colour={GenerateLinearGradient('#eeeeee')}
+                  selected={labelID === 0}
+                  className={labelID === 0 ? 'radio-btn-on' : 'radio-btn-off'}
                   onClick={() => setLabelID(0)}
                 />
               </div>
             </Tooltip>
             {labels.map((label, i) => (
-              <Tooltip title={label.name} arrow>
-                <div className='radio-button-container'>
-                  <div
-                    style={{ backgroundColor: label.colour }}
+              <Tooltip title={label.name} arrow placement='top'>
+                <div className='radio-btn-container'>
+                  <ColourButton
+                    colour={GenerateLinearGradient(label.colour)}
+                    selected={labelID === label.labelID}
                     className={
                       labelID === label.labelID
-                        ? 'radio-button-on'
-                        : 'radio-button-off'
+                        ? 'radio-btn-on'
+                        : 'radio-btn-off'
                     }
                     key={i}
                     onClick={() => setLabelID(label.labelID)}
@@ -99,60 +100,54 @@ const SearchTab = ({
           </div>
           {none}
           {currTasksFiltered.length > 0 && (
-            <>
-              <div className='heading'>Ongoing Tasks</div>
+            <div>
+              <Heading>Ongoing Tasks</Heading>
               <TasksList
                 tasksList={currTasksFiltered}
                 setCurrTasks={setCurrTasks}
                 labels={labels}
                 tab={CURRENT_TASK_TAB}
-                showDelete={true}
-                showFinish={true}
                 totalTime={totalTime}
+                showDelete
+                showFinish
               />
-            </>
+            </div>
           )}
           {pastTasksFiltered.length > 0 && (
-            <>
-              <div className='heading'>Previous Tasks</div>
+            <div>
+              <Heading>Previous Tasks</Heading>
               <TasksList
                 tasksList={pastTasksFiltered}
                 labels={labels}
                 tab={PAST_TASK_TAB}
                 totalTime={totalTime}
               />
-            </>
+            </div>
           )}
-        </>
+        </div>
       ) : (
-        <>
+        <div>
           {currTasksSearch.length > 0 && (
-            <>
-              {/* <div className='heading'>Ongoing Tasks</div> */}
-              <TasksList
-                tasksList={currTasksSearch}
-                setCurrTasks={setCurrTasks}
-                labels={labels}
-                tab={CURRENT_TASK_TAB}
-                showDelete={true}
-                showFinish={true}
-              />
-            </>
+            <TasksList
+              tasksList={currTasksSearch}
+              setCurrTasks={setCurrTasks}
+              labels={labels}
+              tab={CURRENT_TASK_TAB}
+              showDelete
+              showFinish
+            />
           )}
           {pastTasksSearch.length > 0 && (
-            <>
-              {/* <div className='heading'>Previous Tasks</div> */}
-              <TasksList
-                tasksList={pastTasksSearch}
-                labels={labels}
-                tab={PAST_TASK_TAB}
-              />
-            </>
+            <TasksList
+              tasksList={pastTasksSearch}
+              labels={labels}
+              tab={PAST_TASK_TAB}
+            />
           )}
-        </>
+        </div>
       )}
-    </div>
+    </TabContainer>
   );
 };
 
-export default SearchTab
+export default SearchTab;

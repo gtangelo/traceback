@@ -1,71 +1,65 @@
-
-.task-item-container {
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 10px;
-}
-
-.circle-button, .play-button {
-  width: 25px;
-  height: 25px;
-  border-radius: 25px;
-  background-color: #e0e0e0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.task-colour {
-  width: 20px;
-  height: 20px;
-  border-radius: 20px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.circle-button:hover, .play-button:hover, .new-task-button:hover {
-  cursor: pointer;
-}
-
-.button-img {
-  width: 13px;
-}
-
-.play-button {
-  width: 110px;
-  color: #333333;
-  padding: 0 10px;
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-}
-
-.buttons-container {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  gap: 7px;
-}
-
-.task-name-container {
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  gap: 10px;
-  width: auto;
-}
-
-.task-name-container:hover {
-  cursor: pointer;
-}
-
-.day-container {
+/* TasksList css styling */
+.date-section {
   display: flex;
   justify-content: space-between;
   align-items: center;
   width: 100%;
   margin-bottom: 5px;
+}
+
+/* TaskItemModal css */
+
+.task-label {
+  padding: 5px 10px;
+  border-radius: 15px;
+  font-size: 10px;
+  width: fit-content;
+}
+
+.task-title {
+  font-weight: bold;
+  font-size: 15px;
+  letter-spacing: 1px;
+  color: #333333;
+}
+
+#main-info-section, #date-info-section {
+  display: flex;
+  width: 100%;
+}
+
+.name-container {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+}
+
+.date-container {
+  display: flex;
+  width: 50%;
+  flex-direction: column;
+  align-items: center;
+}
+
+.title {
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.response {
+  font-size: 16px;
+  font-weight: bolder;
+}
+
+.time-container {
+  border-radius: 20px;
+  width: 50%;
+  height: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  padding: 10px;
+  font-size: 24px;
+  background: linear-gradient(180deg, #BB6BD9 0%, #9144D8 100%);
 }

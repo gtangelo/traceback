@@ -8,7 +8,9 @@ import {
   AiOutlineUnorderedList,
   AiOutlineSearch,
 } from 'react-icons/ai';
+import { FaPowerOff } from 'react-icons/fa';
 import { MdLabel } from 'react-icons/md';
+import { TooltipButton, CircleButton } from 'components/Button/';
 
 const Navbar = ({ tab, setTab }) => {
   let currTab = "off";
@@ -16,16 +18,16 @@ const Navbar = ({ tab, setTab }) => {
   let labelsTab = 'off';
   let searchTab = "off";
   if (tab === CURRENT_TASK_TAB) {
-    currTab = "on"
+    currTab = "on";
   }
   if (tab === PAST_TASK_TAB) {
-    pastTab = "on"
+    pastTab = "on";
   }
   if (tab === LABELS_TAB) {
-    labelsTab = "on"
+    labelsTab = "on";
   }
   if (tab === SEARCH_TAB) {
-    searchTab = "on"
+    searchTab = "on";
   }
 
   const Reset = () => {
@@ -33,7 +35,7 @@ const Navbar = ({ tab, setTab }) => {
       currTasks: [],
       totalTime: 0,
     });
-    chrome.storage.local.remove(["lastUsed"])
+    chrome.storage.local.remove(["lastUsed"]);
   };
 
   return (
@@ -74,7 +76,9 @@ const Navbar = ({ tab, setTab }) => {
           color={searchTab === 'on' ? '#333333' : '#F2F2F2'}
         />
       </div>
-      <button onClick={Reset}>Reset</button>
+      <TooltipButton button={CircleButton} title="Clear" onClick={Reset}>
+        <FaPowerOff size="14px" color="#333333"/>
+      </TooltipButton>
     </nav>
   );
 };

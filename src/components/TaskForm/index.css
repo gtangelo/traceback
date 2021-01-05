@@ -1,26 +1,25 @@
-.modal-background {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0,0,0,0.5);
+/* TaskForm css styling */
+.text-field {
+  width: 170px;
 }
 
-.form-modal {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: #7a7a7a;
-  width: 400px;
-  height: 250px;
-  overflow: auto;
-  z-index: 1;
-  padding: 20px;
+.flex-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.label-selection {
+.display-form {
+  display: block;
+  padding: 5px;
+}
+
+.hide-form {
+  display: none;
+}
+
+/* Add Label css styling*/
+.label-selection-container {
   display: flex;
   flex-wrap: wrap;
   height: auto;
@@ -28,7 +27,11 @@
   border-radius: 5px;
 }
 
-.label-selection-row {
+.label-selection-container:hover {
+  border: solid 1px #212121;
+}
+
+.labels-section {
   width: 100%;
   display: flex;
   justify-content: space-between;
@@ -39,11 +42,7 @@
   gap: 10px;
 }
 
-.label-form-container {
-  width: 100%;
-}
-
-.label-selection-container {
+.label-selection {
   display: flex;
   flex-wrap: nowrap;
   overflow-x: auto;
@@ -53,23 +52,8 @@
   padding: 5px 0;
 }
 
-.label-colour-tag-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  align-items: center;
-  padding: 5px 0;
-}
-
-.label-selection:hover {
-  border: solid 1px #212121;
-}
-
-.text-field:hover, .label-selection:hover {
-  transition: all ease-in 0.3s;
-}
-
-.radio-button-container {
+/* Label Colour Btn css styling */
+.radio-btn-container {
   width: 25px;
   height: 25px;
   display: flex;
@@ -78,34 +62,15 @@
   flex: 0 0 auto;
 }
 
-.label-form {
-  display: block;
-  padding: 5px;
-}
-
-.text-field {
-  width: 170px;
-}
-
-.field-section {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.radio-button-on, .radio-button-off {
-  width: 20px;
-  height: 20px;
-  border-radius: 20px;
-}
-
-.radio-button-on {
+.radio-btn-on {
   opacity: 0.5;
-  width: 25px;
-  height: 25px;
-  border-radius: 25px;
 }
 
-.radio-button-on:hover, .radio-button-off:hover {
-  cursor: pointer;
+/* LabelForm css styling */
+.label-colours-section {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  padding: 5px 0;
 }

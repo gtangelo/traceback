@@ -1,11 +1,13 @@
 import React from 'react';
 import TasksList from 'components/TasksList';
+import { TabContainer } from 'components/TabContainer';
+import { Heading } from 'components/Title';
 import { PAST_TASK_TAB } from 'utils/constants';
 
 const PastTaskTab = ({ pastTasks, labels, totalTime }) => {
   return (
-    <div className='tab-container'>
-      <div className='heading'>Past Tasks</div>
+    <TabContainer>
+      <Heading>Past Tasks</Heading>
       {pastTasks.length === 0 ? (
         <div>No completed tasks available to show</div>
       ) : (
@@ -13,14 +15,12 @@ const PastTaskTab = ({ pastTasks, labels, totalTime }) => {
           tasksList={pastTasks}
           labels={labels}
           tab={PAST_TASK_TAB}
-          showDate={true}
-          showInfo={true}
           totalTime={totalTime}
-          showTime={true}
-          showToday={false}
+          showDate
+          showTime
         />
       )}
-    </div>
+    </TabContainer>
   );
 };
 
