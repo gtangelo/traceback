@@ -11,42 +11,64 @@ const SearchTab = ({
   pastTasks,
   totalTime,
 }) => {
-  const [labelID, setLabelID] = useState(0);
-  const [labelData, setLabelData] = useState('');
+  const [labelID, setLabelID] = useState(-1);
   const [search, setSearch] = useState('');
 
-  const currTasksFiltered = currTasks.filter(
-    (task) => task.labelID === labelID
-  );
-  const pastTasksFiltered = pastTasks.filter(
-    (task) => task.labelID === labelID
-  );
+  let currTasksFiltered = currTasks
+  if (labelID !== -1) {
+    currTasksFiltered = currTasks.filter(
+      (task) => task.labelID === labelID
+    );
+  }
+
+  let pastTasksFiltered = pastTasks;
+  if (labelID !== -1) {
+    pastTasksFiltered = pastTasks.filter((task) => task.labelID === labelID);
+  } 
+
   let none = '';
   if (currTasksFiltered.length === 0 && pastTasksFiltered.length === 0) {
     none = 'No ongoing or previous tasks have been assigned with this label.';
   }
   const currTasksSearch = currTasks.filter((task) =>
-    task.name.includes(search)
+    task.name.toLowerCase().includes(search.toLowerCase())
   );
   const pastTasksSearch = pastTasks.filter((task) =>
-    task.name.includes(search)
+    task.name.toLowerCase().includes(search.toLowerCase())
   );
+
   return (
     <div className='tab-container'>
       <div className='tracking-navbar'>
         <div className='heading'>Search</div>
         <TextField
           label='Search Task Name'
-          id='outlined-size-small'
+          id='search'
           variant='outlined'
           size='small'
+          className='text-field'
+          InputLabelProps={{
+            shrink: true,
+          }}
           onChange={(e) => setSearch(e.target.value)}
         />
       </div>
+      <br/>
       {search === '' ? (
         <>
           {' '}
-          <div className='label-selection'>
+          <div className='label-colour-tag-container'>
+            <Tooltip title='All' arrow>
+              <div className='radio-button-container'>
+                <div
+                  style={{ backgroundColor: '#000000' }}
+                  className={
+                    labelID === -1 ? 'radio-button-on' : 'radio-button-off'
+                  }
+                  onClick={() => setLabelID(-1)}
+                />
+              </div>
+            </Tooltip>
             <Tooltip title='None' arrow>
               <div className='radio-button-container'>
                 <div
@@ -54,10 +76,7 @@ const SearchTab = ({
                   className={
                     labelID === 0 ? 'radio-button-on' : 'radio-button-off'
                   }
-                  onClick={() => {
-                    setLabelID(0);
-                    setLabelData({});
-                  }}
+                  onClick={() => setLabelID(0)}
                 />
               </div>
             </Tooltip>
@@ -72,30 +91,21 @@ const SearchTab = ({
                         : 'radio-button-off'
                     }
                     key={i}
-                    onClick={() => {
-                      setLabelID(label.labelID);
-                      setLabelData(label);
-                    }}
+                    onClick={() => setLabelID(label.labelID)}
                   />
                 </div>
               </Tooltip>
             ))}
           </div>
-          <div id='label-info-section'>
-            <div>Label Name: {labelData.name}</div>
-            <div>Description: {labelData.description}</div>
-          </div>
-          <br />
           {none}
           {currTasksFiltered.length > 0 && (
             <>
               <div className='heading'>Ongoing Tasks</div>
               <TasksList
                 tasksList={currTasksFiltered}
-                setCurrTasksList={setCurrTasks}
+                setCurrTasks={setCurrTasks}
                 labels={labels}
                 tab={CURRENT_TASK_TAB}
-                showDate={true}
                 showDelete={true}
                 showFinish={true}
                 totalTime={totalTime}
@@ -121,7 +131,7 @@ const SearchTab = ({
               {/* <div className='heading'>Ongoing Tasks</div> */}
               <TasksList
                 tasksList={currTasksSearch}
-                setCurrTasksList={setCurrTasks}
+                setCurrTasks={setCurrTasks}
                 labels={labels}
                 tab={CURRENT_TASK_TAB}
                 showDelete={true}

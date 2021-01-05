@@ -1,14 +1,18 @@
 /*global chrome*/
 
 chrome.runtime.onStartup.addListener(() => {
-  chrome.storage.local.get({
-    currTasks: [],
-    totalTime: 0,
-  }, ({currTasks, totalTime}) => {
-      chrome.storage.local.set(
-        { currTasks: currTasks, totalTime: totalTime }
-      );
-  });
+  chrome.storage.local.get(
+    {
+      currTasks: [],
+      totalTime: 0,
+    },
+    ({ currTasks, totalTime }) => {
+      chrome.storage.local.set({
+        currTasks: currTasks,
+        totalTime: totalTime,
+      });
+    }
+  );
 });
 
 setInterval(() => {

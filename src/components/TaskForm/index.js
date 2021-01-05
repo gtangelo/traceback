@@ -14,12 +14,11 @@ const TaskForm = ({ setToggleForm, labels, setLabels, setCurrTasks }) => {
   const [error, setError] = useState('');
   const [time, setTime] = useState('00:00:00');
   const [disable, setDisable] = useState(false);
+  const [name, setName] = useState("")
+  const [description, setDescription] = useState("")
 
   // Add a new task to both dynamodb database and local state
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const name = e.target[0].value;
-    const description = e.target[2].value;
+  const handleSubmit = () => {
     let timeFields = time.split(':'); // split it at the colons
     let timeInSeconds =
       parseInt(timeFields[0]) * 60 * 60 +
@@ -46,9 +45,10 @@ const TaskForm = ({ setToggleForm, labels, setLabels, setCurrTasks }) => {
         })
         .then(() => {
           syncCurrTasks(setCurrTasks);
+          setName("")
+          setDescription("")
         })
         .catch((e) => console.log(e));
-      e.target.reset();
     } else {
       setError('Missing Fields');
     }
@@ -70,132 +70,130 @@ const TaskForm = ({ setToggleForm, labels, setLabels, setCurrTasks }) => {
             onClick={() => setToggleForm((prevState) => !prevState)}
           />
         </div>
-        <form onSubmit={handleSubmit}>
-          <br />
-          <div className='field-section'>
-            <TextField
-              id='taskName'
-              label='Task Name'
-              variant='outlined'
-              size='small'
-              className='text-field'
-              placeholder='Name'
-              InputLabelProps={{
-                shrink: true,
-              }}
-            />
-            <TextField
-              id='taskDescription'
-              label='Description'
-              variant='outlined'
-              size='small'
-              className='text-field'
-              placeholder='Description'
-              InputLabelProps={{
-                shrink: true,
-              }}
+        {/* <form onSubmit={handleSubmit}> */}
+        <br />
+        <div className='field-section'>
+          <TextField
+            id='taskName'
+            label='Task Name'
+            variant='outlined'
+            size='small'
+            className='text-field'
+            placeholder='Name'
+            InputLabelProps={{
+              shrink: true,
+            }}
+            onChange={(e) => setName(e.target.value)}
+          />
+          <TextField
+            id='taskDescription'
+            label='Description'
+            variant='outlined'
+            size='small'
+            className='text-field'
+            placeholder='Description'
+            InputLabelProps={{
+              shrink: true,
+            }}
+            onChange={(e) => setDescription(e.target.value)}
+          />
+        </div>
+        <br />
+        <div className='field-section'>
+          <div className='text-field flex-container'>
+            <FormControlLabel
+              control={
+                <Switch
+                  checked={disable}
+                  onChange={() => setDisable((prevState) => !prevState)}
+                  name='setTime'
+                  color='primary'
+                />
+              }
+              label='Set Time'
             />
           </div>
-          <br />
-          <div className='field-section'>
-            <div className='text-field flex-container'>
-              <FormControlLabel
-                control={
-                  <Switch
-                    checked={disable}
-                    onChange={() => setDisable((prevState) => !prevState)}
-                    name='setTime'
-                    color='primary'
-                  />
-                }
-                label='Set Time'
-              />
-            </div>
-            <div>
-              <TimeField
-                value='00:00:00'
-                input={
-                  <TextField
-                    label='Time'
-                    id='time'
-                    variant='outlined'
-                    size='small'
-                    className='text-field'
-                    disabled={!disable}
-                  />
-                }
-                onChange={(e) => setTime(e.target.value)}
-                showSeconds={true}
-              />
-            </div>
+          <div>
+            <TimeField
+              value='00:00:00'
+              input={
+                <TextField
+                  label='Time'
+                  id='time'
+                  variant='outlined'
+                  size='small'
+                  className='text-field'
+                  disabled={!disable}
+                />
+              }
+              onChange={(e) => setTime(e.target.value)}
+              showSeconds={true}
+            />
           </div>
-          <div className='sub-heading'>Labels Selection</div>
-          <div className='label-selection'>
-            <div className='label-selection-row'>
-              <div className='label-selection-container'>
-                <Tooltip title='None' arrow>
+        </div>
+        <div className='sub-heading'>Labels Selection</div>
+        <div className='label-selection'>
+          <div className='label-selection-row'>
+            <div className='label-selection-container'>
+              <Tooltip title='None' arrow>
+                <div className='radio-button-container'>
+                  <div
+                    style={{ backgroundColor: '#eeeeee' }}
+                    className={
+                      labelID === 0 ? 'radio-button-on' : 'radio-button-off'
+                    }
+                    onClick={() => setLabelID(0)}
+                  />
+                </div>
+              </Tooltip>
+              {labels.map((label, i) => (
+                <Tooltip title={label.name} arrow>
                   <div className='radio-button-container'>
                     <div
-                      style={{ backgroundColor: '#eeeeee' }}
+                      style={{ backgroundColor: label.colour }}
                       className={
-                        labelID === 0 ? 'radio-button-on' : 'radio-button-off'
+                        labelID === label.labelID
+                          ? 'radio-button-on'
+                          : 'radio-button-off'
                       }
-                      onClick={() => setLabelID(0)}
+                      key={i}
+                      onClick={() => setLabelID(label.labelID)}
                     />
                   </div>
                 </Tooltip>
-                {labels.map((label, i) => (
-                  <Tooltip title={label.name} arrow>
-                    <div className='radio-button-container'>
-                      <div
-                        style={{ backgroundColor: label.colour }}
-                        className={
-                          labelID === label.labelID
-                            ? 'radio-button-on'
-                            : 'radio-button-off'
-                        }
-                        key={i}
-                        onClick={() => setLabelID(label.labelID)}
-                      />
-                    </div>
-                  </Tooltip>
-                ))}
-              </div>
-              <div id='add-label-button'>
-                <Tooltip title='Add Label' arrow>
-                  <div
-                    style={{ backgroundColor: '#eeeeee' }}
-                    className='radio-button-on'
-                    onClick={() =>
-                      setToggleLabelForm((prevState) => !prevState)
-                    }
-                  >
-                    <AddIcon style={{ color: '#000000' }} />
-                  </div>
-                </Tooltip>
-              </div>
+              ))}
             </div>
-            <div className={toggleLabelForm ? 'label-form' : 'hidden'}>
-              <LabelForm
-                labels={labels}
-                setLabels={setLabels}
-                setToggleLabelForm={setToggleLabelForm}
-              />
+            <div id='add-label-button'>
+              <Tooltip title='Add Label' arrow>
+                <div
+                  style={{ backgroundColor: '#eeeeee' }}
+                  className='radio-button-on'
+                  onClick={() => setToggleLabelForm((prevState) => !prevState)}
+                >
+                  <AddIcon style={{ color: '#000000' }} />
+                </div>
+              </Tooltip>
             </div>
           </div>
-          <br />
-          {error}
-          <button className='new-task-button' id='Submit' type='submit'>
-            Add Task
-          </button>
-        </form>
-        {/* <div className={toggleLabelForm ? 'display' : 'hidden'}>
-          <LabelForm
-            labels={labels}
-            setLabels={setLabels}
-            setToggleLabelForm={setToggleLabelForm}
-          />
-        </div> */}
+          <div className={toggleLabelForm ? 'label-form' : 'hidden'}>
+            <LabelForm
+              labels={labels}
+              setLabels={setLabels}
+              setToggleLabelForm={setToggleLabelForm}
+            />
+          </div>
+        </div>
+        <br />
+        {error}
+        <button
+          className='new-task-button'
+          id='Submit'
+          type='submit'
+          onClick={handleSubmit}
+        >
+          Add Task
+        </button>
+        {/* </form> */}
       </div>
     </div>
   );

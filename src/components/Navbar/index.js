@@ -31,9 +31,9 @@ const Navbar = ({ tab, setTab }) => {
     const Reset = () => {
       chrome.storage.local.set({
         currTasks: [],
-        pastTasks: [],
         totalTime: 0,
       });
+      chrome.storage.local.remove(["lastUsed"])
     };
 
   return (

@@ -6,7 +6,6 @@ import LabelIDToName from 'utils/helpers/LabelIDToName';
 import './index.css';
 
 const TaskInfoModal = ({ setToggleInfo, task, labels }) => {
-  console.log(task);
   return (
     <div>
       <div className='modal-background' onClick={() => setToggleInfo(prevState => !prevState)} />

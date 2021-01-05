@@ -1,7 +1,10 @@
 import axios from 'axios';
 import LabelForm from 'components/TaskForm/LabelForm';
 import React, { useState } from 'react';
-import { AiOutlinePlus, AiOutlineInfo, AiFillDelete } from 'react-icons/ai';
+import { AiOutlinePlus } from 'react-icons/ai';
+import { FaBackspace } from 'react-icons/fa';
+import LabelIDToColour from 'utils/helpers/LabelIDToColour';
+
 import retrieveLabels from 'utils/helpers/retrieveLabels';
 
 const LabelsTab = ({ labels, setLabels }) => {
@@ -47,39 +50,43 @@ const LabelsTab = ({ labels, setLabels }) => {
           <h5>Add Label</h5>
         </div>
       </div>
-      {labels.length === 0 ? (
-        <div>No labels available to show</div>
-      ) : (
-        labels.map((label, i) => (
-          <div key={i}>
-            <div className='task-item-container'>
-              <div className='task-name-container'>
-                <div
-                  className='task-colour'
-                  style={{
-                    backgroundColor: label.colour,
-                  }}
-                />
-                <div className='task-name'>{label.name}</div>
-              </div>
-              <div className='buttons-container'>
-                <div
-                  className='circle-button'
-                  onClick={() => DeleteLabel(label.labelID)}
-                >
-                  <AiFillDelete size='20px' color='#333333' />
-                </div>
-                <div
-                  className='circle-button'
-                  // onClick={() => setToggleInfo((prevState) => !prevState)}
-                >
-                  <AiOutlineInfo size='20px' color='#333333' />
-                </div>
+      <br />
+      <div>
+        <div className='task-item-container'>
+          <div className='task-name-container'>
+            <div
+              className='task-colour'
+              style={{
+                backgroundColor: LabelIDToColour(labels, 0),
+              }}
+            />
+            <div className='task-name'>None</div>
+          </div>
+        </div>
+      </div>
+      {labels.map((label, i) => (
+        <div key={i}>
+          <div className='task-item-container'>
+            <div className='task-name-container'>
+              <div
+                className='task-colour'
+                style={{
+                  backgroundColor: label.colour,
+                }}
+              />
+              <div className='task-name'>{label.name}</div>
+            </div>
+            <div className='buttons-container'>
+              <div
+                className='circle-button'
+                onClick={() => DeleteLabel(label.labelID)}
+              >
+                <FaBackspace size='16px' color='#333333' />
               </div>
             </div>
           </div>
-        ))
-      )}
+        </div>
+      ))}
     </div>
   );
 }

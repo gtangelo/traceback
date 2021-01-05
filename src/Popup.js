@@ -23,7 +23,7 @@ const Popup = () => {
   const [pastTasks, setPastTasks] = useState([]);
   const [currTasks, setCurrTasks] = useState([]);
   const [labels, setLabels] = useState([]);
-  const [timeLog, setTimeLog] = useState({});
+  const [play, setPlay] = useState(null)
 
   // For every time the popup is clicked, make an initial API call depending on
   // the context.
@@ -36,6 +36,17 @@ const Popup = () => {
   // Furthermore, it fetches the total time spent of recording tasks for 
   // previous days.
   useEffect(() => {
+    chrome.storage.local.get(["lastUsed"], ({ lastUsed }) => {
+      console.log(lastUsed)
+      const todayDate = new Date();
+      todayDate.setHours(0, 0, 0, 0);
+      lastUsed.setHours(0, 0, 0, 0);
+      if (lastUsed.getTime() !== todayDate.getTime()) {
+        chrome.storage.local.set({totalTime: 0})
+      }
+      chrome.storage.local.set({lastUsed: new Date()})
+    });
+
     chrome.storage.local.get('currTasks', (payload) => {
       if (payload.currTasks.length > 0) {
         axios
@@ -49,6 +60,7 @@ const Popup = () => {
       retrievePastTasks(setPastTasks);
       retrieveLabels(setLabels);
     });
+
   }, []);
 
   // For every second, update the state of all tasks to the data that is found 
@@ -59,30 +71,41 @@ const Popup = () => {
       ['currTasks', 'pastTasks', 'totalTime'],
       (payload) => {
         setCurrTasks(payload.currTasks);
-        setPastTasks(payload.pastTasks);
-        setTotalTime(payload.totalTime)
+        setTotalTime(payload.totalTime);
+        let status = payload.currTasks.filter((task) => task.onPlay).length > 0;
+        setPlay(status)
       }
     );
   }, 1000);
 
   // Generates the start and end times of when at least a single task has been 
   // playing.
-  const play = currTasks.filter((task) => task.onPlay).length > 0;
   useEffect(() => {
     if (play) {
-      setTimeLog({
-        start: Math.floor(new Date().getTime() / 1000),
+      chrome.storage.local.get(['start'], ({ start }) => {
+        if (start === 0) {
+          chrome.storage.local.set({
+            start: Math.floor(new Date().getTime() / 1000),
+          });
+        }
       });
-    } else {
-      axios
-        .post('/time-log/create', {
-          userID: 1,
-          start: timeLog['start'],
-          end: Math.floor(new Date().getTime() / 1000),
-        })
-        .then(() => setTimeLog({}))
-        .catch((e) => console.log(e));
+    } else if (!play){
+      chrome.storage.local.get(['start'], ({ start }) => {
+        if (start !== 0) {
+          axios
+            .post('/time-log/create', {
+              userID: 1,
+              start: start,
+              end: Math.floor(new Date().getTime() / 1000),
+            })
+            .then(() => {
+              chrome.storage.local.set({ start: 0 });
+            })
+            .catch((e) => console.log(e));
+        }
+      });
     }
+
   }, [play]);
 
   // Determine which tab to show

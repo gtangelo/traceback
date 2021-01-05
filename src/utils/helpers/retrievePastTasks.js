@@ -1,4 +1,3 @@
-/* global chrome */
 import axios from 'axios';
 
 // API call to fetch past task list that is stored in dynamodb on AWS and then copies
@@ -13,7 +12,6 @@ const retrievePastTasks = (setPastTasks) => {
     .then(({ data }) => {
       const tasksList = data['tasks_list'].sort((a, b) => b['start'] - a['start']);
       setPastTasks(tasksList);
-      // chrome.storage.local.set({ pastTasks: tasksList });
     })
     .catch((e) => console.log(e));
 };

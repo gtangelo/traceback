@@ -8,13 +8,9 @@ const LabelForm = ({ setLabels, setToggleLabelForm }) => {
   const [error, setError] = useState("")
   const [colourCode, setColourCode] = useState(null);
   const [name, setName] = useState("")
-  const [description, setDescription] = useState("")
 
   const handleSubmit = () => {
     // form fields validation
-    if (description.length <= 0) {
-      setError('Description must be greater than 0 characters');
-    }
     if (colourCode === null) {
       setError('Colour tag must be selected');
     }
@@ -23,14 +19,13 @@ const LabelForm = ({ setLabels, setToggleLabelForm }) => {
     }
 
     // api request to create a new label
-    if (name.length > 0 && description.length > 0 && colourCode != null) {
+    if (name.length > 0 && colourCode != null) {
       setToggleLabelForm((prevState) => !prevState);
       axios
         .post('/label/create', {
           userID: 1,
           colour: colourCode,
           name: name,
-          description: description,
         })
         .then(({ data }) => {
           setLabels((prevState) => [
@@ -40,11 +35,9 @@ const LabelForm = ({ setLabels, setToggleLabelForm }) => {
               labelID: data['labelID'],
               name: name,
               colour: colourCode,
-              description: description,
             },
           ]);
           setName("")
-          setDescription("")
           setColourCode(null)
         })
         .catch((e) => console.log(e));
@@ -60,13 +53,6 @@ const LabelForm = ({ setLabels, setToggleLabelForm }) => {
           placeholder='Label Name'
           className='text-field'
           onChange={(e) => setName(e.target.value)}
-        />
-        <TextField
-          id='labelDescription'
-          type='text'
-          placeholder='Label Description'
-          className='text-field'
-          onChange={(e) => setDescription(e.target.value)}
         />
       </div>
       Select Tag
