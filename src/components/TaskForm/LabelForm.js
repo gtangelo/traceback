@@ -6,7 +6,7 @@ import { FaPlus } from 'react-icons/fa';
 import { TextField } from '@material-ui/core';
 
 import { AddButton, ColourButton } from 'components/styled/Button';
-import { SubHeading } from 'components/styled/Title';
+import { SubHeading, TaskTitle } from 'components/styled/Title';
 import colours from 'utils/colours';
 import { USER_ID } from 'utils/constants';
 import { GenerateLinearGradient } from 'utils/helpers';
@@ -80,7 +80,7 @@ const LabelForm = ({ setLabels, setToggleLabelForm }) => {
       {error}
       <AddButton onClick={handleSubmit} style={{float: 'right'}}>
         <FaPlus size='12px' color='#333333' />
-        <h5>Create Label</h5>
+        <TaskTitle>Create Label</TaskTitle>
       </AddButton>
     </div>
   );

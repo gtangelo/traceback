@@ -15,8 +15,8 @@ const BaseButton = styled.button`
   ${removeDefaultButton}
   cursor: pointer;
   padding: 0 5px;
-  height: 25px;
-  border-radius: 25px;
+  height: 22px;
+  border-radius: 22px;
   display: flex;
   justify-content: space-around;
   align-items: center;
@@ -30,8 +30,8 @@ const BaseButton = styled.button`
 `;
 
 export const CircleButton = styled(BaseButton)`
-  width: 25px;
-  border-radius: 25px;
+  width: 22px;
+  border-radius: 22px;
   padding: 0;
 `;
 
@@ -48,8 +48,13 @@ export const LongButton = styled(BaseButton)`
 `;
 
 export const AddButton = styled(BaseButton)`
-  height: 30px;
-  background: linear-gradient(180deg, #bb6bd9 0%, #9144d8 100%);
+  height: 25px;
+  /* background: linear-gradient(180deg, #bb6bd9 0%, #9144d8 100%); */
+  background: linear-gradient(
+    360deg,
+    rgba(51, 152, 67, 1) 0%,
+    rgba(56, 181, 76, 1) 100%
+  );
   border-radius: 20px;
   display: flex;
   align-items: center;

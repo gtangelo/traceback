@@ -98,7 +98,7 @@ const TaskListItem = ({
 
   return (
     <div>
-      <div className={!toggleInfo ? 'hidden' : ''}>
+      <div className={!toggleInfo ? 'hide-modal' : ''}>
         <TaskItemModal
           setToggleInfo={setToggleInfo}
           task={task}
@@ -106,7 +106,8 @@ const TaskListItem = ({
         />
       </div>
       <ItemContainer>
-        <ItemNameSection hover
+        <ItemNameSection
+          hover
           onClick={() => setToggleInfo((prevState) => !prevState)}
         >
           <TooltipButton

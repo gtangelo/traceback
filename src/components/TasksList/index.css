@@ -7,6 +7,10 @@
   margin-bottom: 5px;
 }
 
+.hide-modal {
+  display: none;
+}
+
 /* TaskItemModal css */
 
 .task-label {

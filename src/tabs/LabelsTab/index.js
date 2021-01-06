@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-import { FaBackspace, FaPlusCircle } from 'react-icons/fa';
+import { FaBackspace, FaPlus } from 'react-icons/fa';
 
 import LabelForm from 'components/TaskForm/LabelForm';
 import { ModalBackground, FormModal } from 'components/styled/Modal';
-import { HeaderSection, Heading } from 'components/styled/Title';
+import { HeaderSection, Heading, TaskTitle } from 'components/styled/Title';
 import {
   TaskButton,
   TooltipButton,
@@ -60,11 +60,11 @@ const LabelsTab = ({ labels, setLabels }) => {
       <HeaderSection>
         <Heading>Labels</Heading>
         <AddButton onClick={() => setToggleForm((prevState) => !prevState)}>
-          <FaPlusCircle size='20px' color='#333333' />
-          <h5>Add Label</h5>
+          <FaPlus size='16px' color='#333333' />
+          <TaskTitle>Add Label</TaskTitle>
         </AddButton>
       </HeaderSection>
-      <br />
+      <br/>
       <div>
         <ItemContainer>
           <ItemNameSection>

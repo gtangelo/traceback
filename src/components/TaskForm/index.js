@@ -7,7 +7,7 @@ import { FaPlus, FaTimes } from 'react-icons/fa';
 import { FormControlLabel, Switch, TextField, Tooltip } from '@material-ui/core';
 
 import LabelForm from './LabelForm';
-import { HeaderSection, SubHeading } from 'components/styled/Title';
+import { HeaderSection, SubHeading, TaskTitle } from 'components/styled/Title';
 import { ModalBackground, FormModal } from 'components/styled/Modal';
 import { CircleButton, AddButton, ColourButton } from 'components/styled/Button';
 import { NoneColour } from 'utils/colours';
@@ -168,7 +168,6 @@ const TaskForm = ({ setToggleForm, labels, setLabels, setCurrTasks }) => {
               <Tooltip title='Add Label' arrow placement='top'>
                 <ColourButton
                   colour={GenerateLinearGradient(NoneColour)}
-                  className='radio-btn-on'
                   selected
                   onClick={() => setToggleLabelForm((prevState) => !prevState)}
                 >
@@ -189,7 +188,7 @@ const TaskForm = ({ setToggleForm, labels, setLabels, setCurrTasks }) => {
         {error}
         <AddButton onClick={handleSubmit} style={{ float: 'right' }}>
           <FaPlus size='12px' color='#333333' />
-          <h5>Create Task</h5>
+          <TaskTitle>Create Task</TaskTitle>
         </AddButton>
       </FormModal>
     </div>

@@ -9,6 +9,7 @@ const PastTaskTab = ({ pastTasks, labels, totalTime }) => {
   return (
     <TabContainer>
       <Heading>Past Tasks</Heading>
+      <br/>
       {pastTasks.length === 0 ? (
         <div>No completed tasks available to show</div>
       ) : (

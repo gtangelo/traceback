@@ -1,12 +1,8 @@
 .Popup {
   font-family: 'Roboto', sans-serif;
-  width: 450px;
-  height: 400px;
+  width: 440px;
+  height: 300px;
   background-color: #FAF9F9;
   display: flex;
-  font-size: 14px;
-}
-
-.hidden {
-  display: none;
+  font-size: 12px;
 }
