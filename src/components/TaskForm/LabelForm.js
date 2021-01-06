@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import './index.css';
+
 import { FaPlus } from 'react-icons/fa';
 import { TextField } from '@material-ui/core';
-import { AddButton, ColourButton } from 'components/Button';
-import { SubHeading } from 'components/Title';
-import GenerateLinearGradient from 'utils/helpers/GenerateLinearGradient';
+
+import { AddButton, ColourButton } from 'components/styled/Button';
+import { SubHeading } from 'components/styled/Title';
 import colours from 'utils/colours';
+import { USER_ID } from 'utils/constants';
+import { GenerateLinearGradient } from 'utils/helpers';
 
 const LabelForm = ({ setLabels, setToggleLabelForm }) => {
   const [error, setError] = useState("");
@@ -19,7 +22,7 @@ const LabelForm = ({ setLabels, setToggleLabelForm }) => {
       setToggleLabelForm((prevState) => !prevState);
       axios
         .post('/label/create', {
-          userID: 1,
+          userID: USER_ID,
           colour: colourCode,
           name: name,
         })
@@ -27,7 +30,7 @@ const LabelForm = ({ setLabels, setToggleLabelForm }) => {
           setLabels((prevState) => [
             ...prevState,
             {
-              userID: 1,
+              userID: USER_ID,
               labelID: data['labelID'],
               name: name,
               colour: colourCode,

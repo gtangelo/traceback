@@ -1,15 +1,8 @@
 /* global chrome */
-
 import React from 'react';
 import axios from 'axios';
-import {
-  CURRENT_TASK_TAB,
-  PAST_TASK_TAB,
-  LABELS_TAB,
-  SEARCH_TAB,
-  USER_ID,
-} from 'utils/constants';
 import './index.css';
+
 import {
   AiOutlineFieldTime,
   AiOutlineUnorderedList,
@@ -17,7 +10,15 @@ import {
 } from 'react-icons/ai';
 import { FaPowerOff } from 'react-icons/fa';
 import { MdLabel } from 'react-icons/md';
-import { TooltipButton, CircleButton } from 'components/Button/';
+
+import { TooltipButton, CircleButton } from 'components/styled/Button';
+import {
+  CURRENT_TASK_TAB,
+  PAST_TASK_TAB,
+  LABELS_TAB,
+  SEARCH_TAB,
+  USER_ID,
+} from 'utils/constants';
 
 const Navbar = ({ tab, setTab }) => {
   let currTab = "off";

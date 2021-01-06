@@ -1,19 +1,6 @@
 /* global chrome */
 import React, { useState } from 'react';
 import axios from 'axios';
-import ClockConverter from 'utils/helpers/ClockConverter';
-
-
-import LabelIDToColour from 'utils/helpers/LabelIDToColour';
-import LabelIDToName from 'utils/helpers/LabelIDToName';
-import updateTaskDatabase from 'utils/helpers/updateTaskDatabase';
-
-import {
-  CircleButton,
-  LongButton,
-  TaskButton,
-  TooltipButton,
-} from 'components/Button/';
 
 import {
   FaInfo,
@@ -24,14 +11,32 @@ import {
 } from 'react-icons/fa';
 
 import TaskItemModal from './TaskItemModal';
-import { CURRENT_TASK_TAB } from 'utils/constants';
+import { TaskTitle } from 'components/styled/Title';
+import {
+  CircleButton,
+  LongButton,
+  TaskButton,
+  TooltipButton,
+} from 'components/styled/Button';
+import {
+  ItemContainer,
+  ItemNameSection,
+  ItemButtonSection,
+} from 'components/styled/Container';
 
-import retrieveCurrTasks from 'utils/helpers/retrieveCurrTasks';
-import retrievePastTasks from 'utils/helpers/retrievePastTasks';
-import syncCurrTasks from 'utils/helpers/syncCurrTasks';
-import { TaskTitle } from 'components/Title';
-import GenerateLinearGradient from 'utils/helpers/GenerateLinearGradient';
-import { ItemContainer, ItemNameSection, ItemButtonSection} from 'components/Container';
+import { CURRENT_TASK_TAB } from 'utils/constants';
+import {
+  ClockConverter,
+  LabelIDToColour,
+  LabelIDToName,
+  GenerateLinearGradient,
+} from 'utils/helpers';
+import {
+  retrieveCurrTasks,
+  retrievePastTasks,
+  syncCurrTasks,
+  updateTaskDatabase,
+} from 'utils/api';
 
 
 const TaskListItem = ({

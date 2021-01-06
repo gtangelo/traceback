@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-
-import ClockConverter from 'utils/helpers/ClockConverter';
-
 import './index.css';
-import SpliceArrayByDay from 'utils/helpers/SpliceArrayByDay';
-import ConvertTimestampToDay from 'utils/helpers/ConvertTimestampToDay';
+
 import TaskListItem from './TaskListItem';
-import { SubHeading } from 'components/Title';
+import { SubHeading } from 'components/styled/Title';
+import { ClockConverter, ConvertTimestampToDay, SpliceArrayByDay } from 'utils/helpers';
+import { USER_ID } from 'utils/constants';
 
 const TasksList = ({
   tasksList,
@@ -26,11 +24,13 @@ const TasksList = ({
   const [timeLogs, setTimeLogs] = useState([]);
   const tasksDayList = SpliceArrayByDay(tasksList);
 
+  // useEffect for a single API call to retrieve the time logs from dynamodb 
+  // database
   useEffect(() => {
     axios
       .get('/time-logs/retrieve', {
         params: {
-          userID: 1,
+          userID: USER_ID,
         },
       })
       .then(({ data }) => {
@@ -39,6 +39,7 @@ const TasksList = ({
       .catch((e) => console.log(e));
   }, []);
 
+  // Determine whether to render the date depending on the props
   const ShowDate = () => {
     if (
       !showDate ||
@@ -56,6 +57,8 @@ const TasksList = ({
     return todayDate.getTime() !== taskDate.getTime();
   };
 
+  // Calculate the total time of a day given the time logs and the day's 
+  // timestamp
   const DisplayTotalTime = (time_logs, date_timestamp) => {
     let time = 0;
     const todayDate = new Date();

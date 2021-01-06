@@ -1,12 +1,11 @@
-import { InfoModal, ModalBackground } from 'components/Modal';
-import { SubHeading, TaskTitle } from 'components/Title';
 import React from 'react';
-import ClockConverter from 'utils/helpers/ClockConverter';
-import ConvertTimestampToDay from 'utils/helpers/ConvertTimestampToDay';
-import GenerateLinearGradient from 'utils/helpers/GenerateLinearGradient';
-import LabelIDToColour from 'utils/helpers/LabelIDToColour';
-import LabelIDToName from 'utils/helpers/LabelIDToName';
 import './index.css';
+
+import { SubHeading } from 'components/styled/Title';
+import { InfoModal, ModalBackground } from 'components/styled/Modal';
+import {
+  ClockConverter, ConvertTimestampToDay, LabelIDToColour, LabelIDToName
+} from 'utils/helpers';
 
 const TaskItemModal = ({ setToggleInfo, task, labels }) => {
   return (

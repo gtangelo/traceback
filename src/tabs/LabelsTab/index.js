@@ -1,19 +1,27 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+
 import { FaBackspace, FaPlusCircle } from 'react-icons/fa';
 
 import LabelForm from 'components/TaskForm/LabelForm';
+import { ModalBackground, FormModal } from 'components/styled/Modal';
+import { HeaderSection, Heading } from 'components/styled/Title';
+import {
+  TaskButton,
+  TooltipButton,
+  CircleButton,
+  AddButton,
+} from 'components/styled/Button';
+import {
+  TabContainer,
+  ItemContainer,
+  ItemNameSection,
+  ItemButtonSection,
+} from 'components/styled/Container';
 
-import { ModalBackground, FormModal } from 'components/Modal';
-import { TabContainer, TabHeader } from 'components/TabContainer';
-import { Heading } from 'components/Title';
-import { ItemContainer, ItemNameSection, ItemButtonSection } from 'components/Container';
-import { TaskButton, TooltipButton, CircleButton, AddButton } from 'components/Button';
-
-import LabelIDToColour from 'utils/helpers/LabelIDToColour';
-import retrieveLabels from 'utils/helpers/retrieveLabels';
-import GenerateLinearGradient from 'utils/helpers/GenerateLinearGradient';
-
+import { LabelIDToColour, GenerateLinearGradient } from 'utils/helpers';
+import { retrieveLabels } from 'utils/api';
+import { USER_ID } from 'utils/constants';
 
 const LabelsTab = ({ labels, setLabels }) => {
   const [toggleForm, setToggleForm] = useState(false);
@@ -23,7 +31,7 @@ const LabelsTab = ({ labels, setLabels }) => {
   const DeleteLabel = labelID => {
     axios.delete('/label/delete', {
       params: {
-        userID: 1,
+        userID: USER_ID,
         labelID: labelID
       }
     }).then(() => {
@@ -49,13 +57,13 @@ const LabelsTab = ({ labels, setLabels }) => {
           </FormModal>
         </div>
       )}
-      <TabHeader>
+      <HeaderSection>
         <Heading>Labels</Heading>
         <AddButton onClick={() => setToggleForm((prevState) => !prevState)}>
           <FaPlusCircle size='20px' color='#333333' />
           <h5>Add Label</h5>
         </AddButton>
-      </TabHeader>
+      </HeaderSection>
       <br />
       <div>
         <ItemContainer>

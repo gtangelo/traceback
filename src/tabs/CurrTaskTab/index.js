@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
-import { FaPlus } from 'react-icons/fa';
 import './index.css';
 
-import ClockConverter from 'utils/helpers/ClockConverter';
-import { CURRENT_TASK_TAB } from 'utils/constants';
+import { FaPlus } from 'react-icons/fa';
+
 import TaskForm from 'components/TaskForm';
 import TasksList from 'components/TasksList';
-import { TabContainer, TabHeader } from 'components/TabContainer';
-import { Heading, TaskTitle } from 'components/Title';
-import { AddButton } from 'components/Button';
-
+import { TabContainer } from 'components/styled/Container';
+import { AddButton } from 'components/styled/Button';
+import { HeaderSection, Heading, TaskTitle } from 'components/styled/Title';
+import { ClockConverter } from 'utils/helpers';
+import { CURRENT_TASK_TAB } from 'utils/constants';
 
 const CurrTaskTab = ({ currTasks, setCurrTasks, setPastTasks, totalTime, labels, setLabels }) => {
   const [toggleForm, setToggleForm] = useState(false);
@@ -35,13 +35,13 @@ const CurrTaskTab = ({ currTasks, setCurrTasks, setPastTasks, totalTime, labels,
           setCurrTasks={setCurrTasks}
         />
       )}
-      <TabHeader>
+      <HeaderSection>
         <Heading>Tracking</Heading>
         <AddButton onClick={() => setToggleForm((prevState) => !prevState)}>
           <FaPlus size='20px' color='#333333' />
           <h5>Add Task</h5>
         </AddButton>
-      </TabHeader>
+      </HeaderSection>
       <div className='tracking-bar'>
         <div className='tracking-tasks'>{activeTaskList}</div>
         <h1>{ClockConverter(totalTime)}</h1>

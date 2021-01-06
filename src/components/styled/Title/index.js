@@ -1,5 +1,11 @@
 import styled from 'styled-components';
 
+export const HeaderSection = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
 const TitleBase = styled.div`
   color: ${(props) => (props.dark ? '#333333' : '#bdbdbd')};
 `;

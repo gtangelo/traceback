@@ -2,20 +2,17 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './axios';
-
-import useInterval from 'utils/hooks/useInterval';
-import { CURRENT_TASK_TAB, PAST_TASK_TAB, LABELS_TAB, SEARCH_TAB } from 'utils/constants';
-
-import Navbar from 'components/Navbar/';
-
 import './Popup.css';
+
+import Navbar from 'components/Navbar';
 import LabelsTab from 'tabs/LabelsTab';
 import SearchTab from 'tabs/SearchTab';
 import CurrTaskTab from 'tabs/CurrTaskTab';
 import PastTaskTab from 'tabs/PastTaskTab';
-import retrieveCurrTasks from 'utils/helpers/retrieveCurrTasks';
-import retrievePastTasks from 'utils/helpers/retrievePastTasks';
-import retrieveLabels from 'utils/helpers/retrieveLabels';
+import useInterval from 'utils/hooks/useInterval';
+import { retrieveCurrTasks, retrievePastTasks, retrieveLabels } from 'utils/api';
+import { CURRENT_TASK_TAB, PAST_TASK_TAB, LABELS_TAB, SEARCH_TAB, USER_ID } from 'utils/constants';
+
 
 const Popup = () => {
   const [tab, setTab] = useState(CURRENT_TASK_TAB);
@@ -32,9 +29,7 @@ const Popup = () => {
   // - Otherwise, if there is data in chrome storage, sync the dynamodb database
   //   with the tasks list found in chrome storage.
   // - Fetches label and past tasks data without any condition
-
-  // Furthermore, it fetches the total time spent of recording tasks for 
-  // previous days.
+  // Furthermore, it sets the total time spent for recording tasks.
   useEffect(() => {
     chrome.storage.local.get(["lastUsed", "totalTime"], ({ lastUsed, totalTime }) => {
       let lastDate = lastUsed;
@@ -51,7 +46,7 @@ const Popup = () => {
         axios
           .get('/time-logs/retrieve', {
             params: {
-              userID: 1,
+              userID: USER_ID,
             },
           })
           .then(({ data }) => {
@@ -86,7 +81,7 @@ const Popup = () => {
   // the result in chrome storage.
   useInterval(() => {
     chrome.storage.local.get(
-      ['currTasks', 'pastTasks', 'totalTime'],
+      ['currTasks', 'totalTime'],
       (payload) => {
         setCurrTasks(payload.currTasks);
         setTotalTime(payload.totalTime);
@@ -112,7 +107,7 @@ const Popup = () => {
         if (start !== 0) {
           axios
             .post('/time-log/create', {
-              userID: 1,
+              userID: USER_ID,
               start: start,
               end: Math.floor(new Date().getTime() / 1000),
             })
@@ -123,7 +118,6 @@ const Popup = () => {
         }
       });
     }
-
   }, [play]);
 
   // Determine which tab to show

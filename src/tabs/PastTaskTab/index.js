@@ -1,7 +1,8 @@
 import React from 'react';
+
 import TasksList from 'components/TasksList';
-import { TabContainer } from 'components/TabContainer';
-import { Heading } from 'components/Title';
+import { TabContainer } from 'components/styled/Container';
+import { Heading } from 'components/styled/Title';
 import { PAST_TASK_TAB } from 'utils/constants';
 
 const PastTaskTab = ({ pastTasks, labels, totalTime }) => {

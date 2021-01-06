@@ -1,20 +1,19 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import TimeField from 'react-simple-timefield';
-import { FormControlLabel, Switch, TextField, Tooltip } from '@material-ui/core';
 import './index.css';
+
+import TimeField from 'react-simple-timefield';
+import { FaPlus, FaTimes } from 'react-icons/fa';
+import { FormControlLabel, Switch, TextField, Tooltip } from '@material-ui/core';
+
 import LabelForm from './LabelForm';
-import syncCurrTasks from 'utils/helpers/syncCurrTasks';
-import { ModalBackground, FormModal } from 'components/Modal';
-import { CircleButton, AddButton, ColourButton } from 'components/Button';
-
-import { FaTimes } from 'react-icons/fa';
-import { SubHeading } from 'components/Title/';
-import { TabHeader } from 'components/TabContainer';
-import GenerateLinearGradient from 'utils/helpers/GenerateLinearGradient';
-import { FaPlus } from 'react-icons/fa';
+import { HeaderSection, SubHeading } from 'components/styled/Title';
+import { ModalBackground, FormModal } from 'components/styled/Modal';
+import { CircleButton, AddButton, ColourButton } from 'components/styled/Button';
 import { NoneColour } from 'utils/colours';
-
+import { GenerateLinearGradient } from 'utils/helpers';
+import { syncCurrTasks } from 'utils/api';
+import { USER_ID } from 'utils/constants';
 
 const TaskForm = ({ setToggleForm, labels, setLabels, setCurrTasks }) => {
   const [labelID, setLabelID] = useState(0);
@@ -38,7 +37,7 @@ const TaskForm = ({ setToggleForm, labels, setLabels, setCurrTasks }) => {
       setToggleForm(prevState => !prevState);
       axios
         .post('/active-task/create', {
-          userID: 1,
+          userID: USER_ID,
           labelID: labelID,
           name: name,
           description: description,
@@ -67,16 +66,16 @@ const TaskForm = ({ setToggleForm, labels, setLabels, setCurrTasks }) => {
         onClick={() => setToggleForm((prevState) => !prevState)}
       />
       <FormModal>
-        <TabHeader>
+        <HeaderSection>
           <SubHeading dark>Create New Task</SubHeading>
           <CircleButton
             onClick={() => setToggleForm((prevState) => !prevState)}
           >
             <FaTimes size='16px' color='#333333' />
           </CircleButton>
-        </TabHeader>
+        </HeaderSection>
         <br />
-        <TabHeader>
+        <HeaderSection>
           <TextField
             id='taskName'
             label='Task Name'
@@ -101,9 +100,9 @@ const TaskForm = ({ setToggleForm, labels, setLabels, setCurrTasks }) => {
             }}
             onChange={(e) => setDescription(e.target.value)}
           />
-        </TabHeader>
+        </HeaderSection>
         <br />
-        <TabHeader>
+        <HeaderSection>
           <div className='text-field flex-container'>
             <FormControlLabel
               control={
@@ -132,7 +131,7 @@ const TaskForm = ({ setToggleForm, labels, setLabels, setCurrTasks }) => {
             onChange={(e) => setTime(e.target.value)}
             showSeconds={true}
           />
-        </TabHeader>
+        </HeaderSection>
         <SubHeading dark>Labels Selection</SubHeading>
         <div className='label-selection-container'>
           <div className='labels-section'>

@@ -25,7 +25,7 @@ const BaseButton = styled.button`
     rgba(208, 208, 208, 1) 0%,
     rgba(249, 249, 249, 1) 100%
   );
-  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   color: #333333;
 `;
 
@@ -50,7 +50,6 @@ export const LongButton = styled(BaseButton)`
 export const AddButton = styled(BaseButton)`
   height: 30px;
   background: linear-gradient(180deg, #bb6bd9 0%, #9144d8 100%);
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 20px;
   display: flex;
   align-items: center;

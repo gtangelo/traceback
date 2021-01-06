@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
-import { TextField, Tooltip } from '@material-ui/core';
-import TasksList from 'components/TasksList';
-import { CURRENT_TASK_TAB, PAST_TASK_TAB } from 'utils/constants';
-import { TabContainer, TabHeader } from 'components/TabContainer';
-import { Heading } from 'components/Title';
-import GenerateLinearGradient from 'utils/helpers/GenerateLinearGradient';
-import { ColourButton } from 'components/Button';
 import 'components/TaskForm/index.css';
+
+import { TextField, Tooltip } from '@material-ui/core';
+
+import TasksList from 'components/TasksList';
+import { TabContainer } from 'components/styled/Container';
+import { HeaderSection, Heading } from 'components/styled/Title';
+import { GenerateLinearGradient } from 'utils/helpers';
+import { ColourButton } from 'components/styled/Button';
 import { NoneColour, AllColour } from 'utils/colours';
+import { CURRENT_TASK_TAB, PAST_TASK_TAB } from 'utils/constants';
 
 const SearchTab = ({
   labels,
@@ -44,7 +46,7 @@ const SearchTab = ({
 
   return (
     <TabContainer>
-      <TabHeader>
+      <HeaderSection>
         <Heading>Search</Heading>
         <TextField
           label='Search Task Name'
@@ -57,7 +59,7 @@ const SearchTab = ({
           }}
           onChange={(e) => setSearch(e.target.value)}
         />
-      </TabHeader>
+      </HeaderSection>
       {search === '' ? (
         <div>
           <div className='label-selection'>
