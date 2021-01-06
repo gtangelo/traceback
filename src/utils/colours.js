@@ -9,11 +9,9 @@ const colours = [
   '#2D3436',
   '#BBBBBB',
   '#CE4E24',
-  '#F87618',
-  '#B1F2BE',
-  '#F36F95',
-  '#D6D377',
-  '#5C5D73',
-  '#FCEE48',
 ];
+
+export const NoneColour = '#626262';
+export const AllColour = '#000000';
+
 export default colours;

@@ -7,6 +7,7 @@ import { Heading } from 'components/Title';
 import GenerateLinearGradient from 'utils/helpers/GenerateLinearGradient';
 import { ColourButton } from 'components/Button';
 import 'components/TaskForm/index.css';
+import { NoneColour, AllColour } from 'utils/colours';
 
 const SearchTab = ({
   labels,
@@ -63,7 +64,7 @@ const SearchTab = ({
             <Tooltip title='All' arrow placement='top'>
               <div className='radio-btn-container'>
                 <ColourButton
-                  colour={GenerateLinearGradient('#000000')}
+                  colour={GenerateLinearGradient(AllColour)}
                   selected={labelID === -1}
                   className={labelID === -1 ? 'radio-btn-on' : 'radio-btn-off'}
                   onClick={() => setLabelID(-1)}
@@ -73,7 +74,7 @@ const SearchTab = ({
             <Tooltip title='None' arrow placement='top'>
               <div className='radio-btn-container'>
                 <ColourButton
-                  colour={GenerateLinearGradient('#eeeeee')}
+                  colour={GenerateLinearGradient(NoneColour)}
                   selected={labelID === 0}
                   className={labelID === 0 ? 'radio-btn-on' : 'radio-btn-off'}
                   onClick={() => setLabelID(0)}

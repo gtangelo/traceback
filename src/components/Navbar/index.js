@@ -1,7 +1,14 @@
 /* global chrome */
 
 import React from 'react';
-import { CURRENT_TASK_TAB, PAST_TASK_TAB, LABELS_TAB, SEARCH_TAB } from 'utils/constants';
+import axios from 'axios';
+import {
+  CURRENT_TASK_TAB,
+  PAST_TASK_TAB,
+  LABELS_TAB,
+  SEARCH_TAB,
+  USER_ID,
+} from 'utils/constants';
 import './index.css';
 import {
   AiOutlineFieldTime,
@@ -36,49 +43,63 @@ const Navbar = ({ tab, setTab }) => {
       totalTime: 0,
     });
     chrome.storage.local.remove(["lastUsed"]);
+    axios.delete('', {
+      params: {
+        userID: USER_ID,
+      },
+    }).catch((e) => console.log(e));
   };
 
   return (
-    <nav>
-      <div
-        className={'nav-item-' + currTab}
-        onClick={() => setTab(CURRENT_TASK_TAB)}
-      >
-        <AiOutlineFieldTime
-          size='25px'
-          color={currTab === 'on' ? '#333333' : '#F2F2F2'}
-        />
+    <nav className='navbar-container'>
+      <div style={{ width: '100%' }}>
+        <div
+          className={'nav-item-' + currTab}
+          onClick={() => setTab(CURRENT_TASK_TAB)}
+        >
+          <AiOutlineFieldTime
+            size='25px'
+            color={currTab === 'on' ? '#333333' : '#F2F2F2'}
+          />
+        </div>
+        <div
+          className={'nav-item-' + pastTab}
+          onClick={() => setTab(PAST_TASK_TAB)}
+        >
+          <AiOutlineUnorderedList
+            size='25px'
+            color={pastTab === 'on' ? '#333333' : '#F2F2F2'}
+          />
+        </div>
+        <div
+          className={'nav-item-' + labelsTab}
+          onClick={() => setTab(LABELS_TAB)}
+        >
+          <MdLabel
+            size='25px'
+            color={labelsTab === 'on' ? '#333333' : '#F2F2F2'}
+          />
+        </div>
+        <div
+          className={'nav-item-' + searchTab}
+          onClick={() => setTab(SEARCH_TAB)}
+        >
+          <AiOutlineSearch
+            size='25px'
+            color={searchTab === 'on' ? '#333333' : '#F2F2F2'}
+          />
+        </div>
       </div>
-      <div
-        className={'nav-item-' + pastTab}
-        onClick={() => setTab(PAST_TASK_TAB)}
-      >
-        <AiOutlineUnorderedList
-          size='25px'
-          color={pastTab === 'on' ? '#333333' : '#F2F2F2'}
-        />
+      <div className='navbar-btn-section'>
+        <TooltipButton
+          button={CircleButton}
+          title='Clear'
+          onClick={Reset}
+          style={{ marginBottom: 10 }}
+        >
+          <FaPowerOff size='14px' color='#333333' />
+        </TooltipButton>
       </div>
-      <div
-        className={'nav-item-' + labelsTab}
-        onClick={() => setTab(LABELS_TAB)}
-      >
-        <MdLabel
-          size='25px'
-          color={labelsTab === 'on' ? '#333333' : '#F2F2F2'}
-        />
-      </div>
-      <div
-        className={'nav-item-' + searchTab}
-        onClick={() => setTab(SEARCH_TAB)}
-      >
-        <AiOutlineSearch
-          size='25px'
-          color={searchTab === 'on' ? '#333333' : '#F2F2F2'}
-        />
-      </div>
-      <TooltipButton button={CircleButton} title="Clear" onClick={Reset}>
-        <FaPowerOff size="14px" color="#333333"/>
-      </TooltipButton>
     </nav>
   );
 };

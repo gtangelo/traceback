@@ -2,13 +2,6 @@
   filter: brightness(0) invert(1);
 }
 
-nav {
-  height: 100%;
-  width: 50px;
-  background-color: #333333;
-  border-right: #F2F2F2 solid 1px;
-}
-
 .nav-item-off, .nav-item-on {
   width: 100%;
   height: 50px;
@@ -24,4 +17,24 @@ nav {
 
 .nav-item-on {
   background-color: #F2F2F2;
+}
+
+.navbar-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: column;
+  height: 100%;
+  width: 50px;
+  background-color: #333333;
+  border-right: #F2F2F2 solid 1px;
+}
+
+.navbar-btn-section {
+  display: flex;
+  justify-content: flex-end;
+  flex-direction: column;
+  gap: 10px;
+  padding-bottom: 10px;
+
 }

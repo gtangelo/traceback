@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import TimeField from 'react-simple-timefield';
 import { FormControlLabel, Switch, TextField, Tooltip } from '@material-ui/core';
-import AddIcon from '@material-ui/icons/Add';
 import './index.css';
 import LabelForm from './LabelForm';
 import syncCurrTasks from 'utils/helpers/syncCurrTasks';
@@ -14,6 +13,8 @@ import { SubHeading } from 'components/Title/';
 import { TabHeader } from 'components/TabContainer';
 import GenerateLinearGradient from 'utils/helpers/GenerateLinearGradient';
 import { FaPlus } from 'react-icons/fa';
+import { NoneColour } from 'utils/colours';
+
 
 const TaskForm = ({ setToggleForm, labels, setLabels, setCurrTasks }) => {
   const [labelID, setLabelID] = useState(0);
@@ -139,7 +140,7 @@ const TaskForm = ({ setToggleForm, labels, setLabels, setCurrTasks }) => {
               <Tooltip title='None' arrow placement='top'>
                 <div className='radio-btn-container'>
                   <ColourButton
-                    colour={GenerateLinearGradient('#eeeeee')}
+                    colour={GenerateLinearGradient(NoneColour)}
                     selected={labelID === 0}
                     className={labelID === 0 ? 'radio-btn-on' : 'radio-btn-off'}
                     onClick={() => setLabelID(0)}
@@ -167,7 +168,7 @@ const TaskForm = ({ setToggleForm, labels, setLabels, setCurrTasks }) => {
             <div id='add-label-button'>
               <Tooltip title='Add Label' arrow placement='top'>
                 <ColourButton
-                  colour={GenerateLinearGradient('#eeeeee')}
+                  colour={GenerateLinearGradient(NoneColour)}
                   className='radio-btn-on'
                   selected
                   onClick={() => setToggleLabelForm((prevState) => !prevState)}
