@@ -8,7 +8,7 @@ import {
   AiOutlineUnorderedList,
   AiOutlineSearch,
 } from 'react-icons/ai';
-import { FaPowerOff } from 'react-icons/fa';
+import { FaPowerOff, FaTrash } from 'react-icons/fa';
 import { MdLabel } from 'react-icons/md';
 
 import { TooltipButton, CircleButton } from 'components/styled/Button';
@@ -38,13 +38,21 @@ const Navbar = ({ tab, setTab }) => {
     searchTab = "on";
   }
 
+  const Clear = () => {
+    chrome.storage.local.set({
+      currTasks: [],
+      totalTime: 0,
+    });
+    chrome.storage.local.remove(['lastUsed']);
+  };
+
   const Reset = () => {
     chrome.storage.local.set({
       currTasks: [],
       totalTime: 0,
     });
     chrome.storage.local.remove(["lastUsed"]);
-    axios.delete('', {
+    axios.delete('/clear', {
       params: {
         userID: USER_ID,
       },
@@ -94,11 +102,19 @@ const Navbar = ({ tab, setTab }) => {
       <div className='navbar-btn-section'>
         <TooltipButton
           button={CircleButton}
-          title='Clear'
-          onClick={Reset}
+          title='Clear Local Storage'
+          onClick={Clear}
           style={{ marginBottom: 10 }}
         >
           <FaPowerOff size='14px' color='#333333' />
+        </TooltipButton>
+        <TooltipButton
+          button={CircleButton}
+          title='Reset Data'
+          onClick={Reset}
+          style={{ marginBottom: 10 }}
+        >
+          <FaTrash size='14px' color='#333333' />
         </TooltipButton>
       </div>
     </nav>

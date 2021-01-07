@@ -25,10 +25,11 @@ chrome.runtime.onStartup.addListener(() => {
 
 setInterval(() => {
   chrome.storage.local.get(
-    ['currTasks', 'totalTime'],
-    ({ currTasks, totalTime }) => {
+    ['currTasks', 'totalTime', 'start'],
+    ({ currTasks, totalTime, start }) => {
       console.log(currTasks);
       console.log(totalTime);
+      console.log(start);
       chrome.storage.local.set({
         currTasks: currTasks.map((task) => {
           if (task.onPlay) {

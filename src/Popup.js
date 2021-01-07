@@ -29,7 +29,8 @@ const Popup = () => {
   // - Otherwise, if there is data in chrome storage, sync the dynamodb database
   //   with the tasks list found in chrome storage.
   // - Fetches label and past tasks data without any condition
-  // Furthermore, it sets the total time spent for recording tasks.
+  // Furthermore, it sets the total time spent for recording tasks and reset it
+  // during midnight.
   useEffect(() => {
     chrome.storage.local.get(["lastUsed", "totalTime"], ({ lastUsed, totalTime }) => {
       let lastDate = lastUsed;

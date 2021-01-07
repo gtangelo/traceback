@@ -165,13 +165,17 @@ const TaskForm = ({ setToggleForm, labels, setLabels, setCurrTasks }) => {
               ))}
             </div>
             <div id='add-label-button'>
-              <Tooltip title='Add Label' arrow placement='top'>
+              <Tooltip title={!toggleLabelForm ? 'Add Label' : 'Close Form'} arrow placement='top'>
                 <ColourButton
                   colour={GenerateLinearGradient(NoneColour)}
                   selected
                   onClick={() => setToggleLabelForm((prevState) => !prevState)}
                 >
-                  <FaPlus color='#333333' size='12px' />
+                  {!toggleLabelForm ? (
+                    <FaPlus color='#333333' size='12px' />
+                  ) : (
+                    <FaTimes color='#333333' size='12px' />
+                  )}
                 </ColourButton>
               </Tooltip>
             </div>

@@ -16,8 +16,8 @@ const BaseModal = styled.div`
   transform: translate(-50%, -50%);
   background-color: #f2f2f2;
   z-index: 1;
-  width: 400px;
-  padding: 20px;
+  width: 380px;
+  padding: 10px;
   color: #333333;
 `;
 
@@ -26,6 +26,6 @@ export const InfoModal = styled(BaseModal)`
 `;
 
 export const FormModal = styled(BaseModal)`
-  max-height: 300px;
+  height: 255px;
   overflow: auto;
 `;

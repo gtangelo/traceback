@@ -24,7 +24,7 @@ import {
   ItemButtonSection,
 } from 'components/styled/Container';
 
-import { CURRENT_TASK_TAB } from 'utils/constants';
+import { CURRENT_TASK_TAB, USER_ID } from 'utils/constants';
 import {
   ClockConverter,
   LabelIDToColour,
@@ -71,7 +71,7 @@ const TaskListItem = ({
     axios
       .delete('/active-task/delete', {
         params: {
-          userID: 1,
+          userID: USER_ID,
           taskID: taskID,
         },
       })
@@ -83,9 +83,10 @@ const TaskListItem = ({
 
   const FinishTask = (taskID, time) => {
     syncCurrTasks(setCurrTasks);
+    console.log(time);
     axios
       .put('/active-task/finish', {
-        userID: 1,
+        userID: USER_ID,
         taskID: taskID,
         time: time,
       })
@@ -148,7 +149,7 @@ const TaskListItem = ({
               <TooltipButton
                 title='Finish'
                 button={CircleButton}
-                onClick={() => FinishTask(task.taskID)}
+                onClick={() => FinishTask(task.taskID, task.time)}
               >
                 <FaLongArrowAltRight size='16px' color='#333333' />
               </TooltipButton>
