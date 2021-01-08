@@ -61,17 +61,21 @@ const CurrTaskTab = ({ currTasks, setCurrTasks, setPastTasks, totalTime, labels,
           STOP
         </div>
       </div>
-      <TasksList
-        tasksList={currTasks}
-        labels={labels}
-        tab={CURRENT_TASK_TAB}
-        setCurrTasks={setCurrTasks}
-        setPastTasks={setPastTasks}
-        totalTime={totalTime}
-        showDate
-        showDelete
-        showFinish
-      />
+      {currTasks.length === 0 ? (
+        <div>No tasks has been created</div>
+      ) : (
+        <TasksList
+          tasksList={currTasks}
+          labels={labels}
+          tab={CURRENT_TASK_TAB}
+          setCurrTasks={setCurrTasks}
+          setPastTasks={setPastTasks}
+          totalTime={totalTime}
+          showDate
+          showDelete
+          showFinish
+        />
+      )}
     </TabContainer>
   );
 };

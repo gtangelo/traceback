@@ -1,5 +1,6 @@
 /* global chrome */
 import axios from 'axios';
+import { USER_ID } from './constants';
 
 // File container helper functions for http calls to Amazon API Gateway
 
@@ -9,7 +10,7 @@ export const retrieveCurrTasks = (setCurrTasks) => {
   axios
     .get('/active-tasks/retrieve', {
       params: {
-        userID: 1,
+        userID: USER_ID,
       },
     })
     .then(({ data }) => {
@@ -28,7 +29,7 @@ export const retrieveLabels = (setLabels) => {
   axios
     .get('/labels/retrieve', {
       params: {
-        userID: 1,
+        userID: USER_ID,
       },
     })
     .then(({ data }) => {
@@ -44,11 +45,13 @@ export const retrievePastTasks = (setPastTasks) => {
   axios
     .get('/inactive-tasks/retrieve', {
       params: {
-        userID: 1,
+        userID: USER_ID,
       },
     })
     .then(({ data }) => {
-      const tasksList = data['tasks_list'].sort((a, b) => b['start'] - a['start']);
+      const tasksList = data['tasks_list'].sort(
+        (a, b) => b['start'] - a['start']
+      );
       setPastTasks(tasksList);
     })
     .catch((e) => console.log(e));
