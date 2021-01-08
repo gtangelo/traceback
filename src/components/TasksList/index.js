@@ -4,7 +4,12 @@ import './index.css';
 
 import TaskListItem from './TaskListItem';
 import { SubHeading } from 'components/styled/Title';
-import { ClockConverter, ConvertTimestampToDay, SpliceArrayByDay } from 'utils/helpers';
+import {
+  ClockConverter,
+  ConvertTimestampToDay,
+  SpliceArrayByDay,
+  CompareTimestamps,
+} from 'utils/helpers';
 import { USER_ID } from 'utils/constants';
 
 const TasksList = ({
@@ -17,8 +22,6 @@ const TasksList = ({
   showDelete,
   showFinish,
   showDate,
-  showToday,
-  showTime,
 }) => {
   
   const [timeLogs, setTimeLogs] = useState([]);
@@ -38,81 +41,41 @@ const TasksList = ({
       })
       .catch((e) => console.log(e));
   }, []);
-
-  // Determine whether to render the date depending on the props
-  const ShowDate = () => {
-    if (
-      !showDate ||
-        !showToday ||
-        tasksDayList.length === 0 ||
-        tasksDayList[0].length === 0
-    ) {
-      return false;
-    }
-    const todayDate = new Date();
-    todayDate.setHours(0, 0, 0, 0);
-    const taskDate = new Date(0);
-    taskDate.setUTCSeconds(tasksDayList[0][0]['start']);
-    taskDate.setHours(0, 0, 0, 0);
-    return todayDate.getTime() !== taskDate.getTime();
-  };
-
-  // Calculate the total time of a day given the time logs and the day's 
-  // timestamp
-  const DisplayTotalTime = (time_logs, date_timestamp) => {
-    let time = 0;
-    const todayDate = new Date();
-    todayDate.setHours(0, 0, 0, 0);
-    const taskDate = new Date(0);
-    taskDate.setUTCSeconds(date_timestamp);
-    taskDate.setHours(0, 0, 0, 0);
-    if (taskDate.getTime() === todayDate.getTime()) {
-      time = totalTime;
-    } else {
-      for (let i = 0; i < time_logs.length; i++) {
-        const logDate = new Date(0);
-        logDate.setUTCSeconds(time_logs[i]['date']);
-        logDate.setHours(0, 0, 0, 0);
-        if (logDate.getTime() === taskDate.getTime()) {
-          time = time_logs[i]['time'];
-        }
-      }
-    }
-    return ClockConverter(time);
-  };
-
+  
   return (
     <div className='task-list-section'>
-      {ShowDate() && (
-        <div className='date-section'>
-          <SubHeading>Today</SubHeading>
-          <div>{ClockConverter(totalTime)}</div>
-        </div>
-      )}
-      {tasksDayList.map((tasks, i) => (
-        <div key={i}>
+      {timeLogs.map((timeLog) => (
+        <>
           {showDate && (
             <div className='date-section'>
-              <SubHeading>
-                {ConvertTimestampToDay(tasks[0]['start'])}
-              </SubHeading>
-              {showTime && (
-                <div>{DisplayTotalTime(timeLogs, tasks[0]['start'])}</div>
+              <SubHeading>{ConvertTimestampToDay(timeLog['date'])}</SubHeading>
+              {CompareTimestamps(timeLog['date']) ? (
+                <div>{ClockConverter(totalTime)}</div>
+              ) : (
+                <div>{ClockConverter(timeLog['time'])}</div>
               )}
             </div>
           )}
-          {tasks.map((task, i) => (
-            <TaskListItem
-              task={task}
-              labels={labels}
-              tab={tab}
-              showFinish={showFinish}
-              showDelete={showDelete}
-              setCurrTasks={setCurrTasks}
-              setPastTasks={setPastTasks}
-            />
+          {tasksDayList.map((tasks, i) => (
+            <div key={i}>
+              {tasks.map((task, i) => (
+                <>
+                  {CompareTimestamps(timeLog['date'], tasks[0]['start']) && (
+                    <TaskListItem
+                      task={task}
+                      labels={labels}
+                      tab={tab}
+                      showFinish={showFinish}
+                      showDelete={showDelete}
+                      setCurrTasks={setCurrTasks}
+                      setPastTasks={setPastTasks}
+                    />
+                  )}
+                </>
+              ))}
+            </div>
           ))}
-        </div>
+        </>
       ))}
     </div>
   );

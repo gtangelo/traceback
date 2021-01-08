@@ -68,8 +68,6 @@ const CurrTaskTab = ({ currTasks, setCurrTasks, setPastTasks, totalTime, labels,
         setCurrTasks={setCurrTasks}
         setPastTasks={setPastTasks}
         totalTime={totalTime}
-        showTime
-        showToday
         showDate
         showDelete
         showFinish

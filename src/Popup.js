@@ -10,6 +10,7 @@ import SearchTab from 'tabs/SearchTab';
 import CurrTaskTab from 'tabs/CurrTaskTab';
 import PastTaskTab from 'tabs/PastTaskTab';
 import useInterval from 'utils/hooks/useInterval';
+import { CompareTimestamps } from 'utils/helpers';
 import { retrieveCurrTasks, retrievePastTasks, retrieveLabels } from 'utils/api';
 import { CURRENT_TASK_TAB, PAST_TASK_TAB, LABELS_TAB, SEARCH_TAB, USER_ID } from 'utils/constants';
 
@@ -29,38 +30,37 @@ const Popup = () => {
   // - Otherwise, if there is data in chrome storage, sync the dynamodb database
   //   with the tasks list found in chrome storage.
   // - Fetches label and past tasks data without any condition
-  // Furthermore, it sets the total time spent for recording tasks and reset it
-  // during midnight.
+  // Furthermore, it reset the total time during midnight.
+  
   useEffect(() => {
-    chrome.storage.local.get(["lastUsed", "totalTime"], ({ lastUsed, totalTime }) => {
-      let lastDate = lastUsed;
-      const todayDate = new Date();
-      todayDate.setHours(0, 0, 0, 0);
-      try {
-        lastDate.setHours(0, 0, 0, 0);
-      } catch {
-        lastDate = todayDate;
-      }
-      if (lastDate.getTime() !== todayDate.getTime()) {
-        chrome.storage.local.set({ totalTime: 0 });
-      } else if (totalTime === 0) {
-        axios
-          .get('/time-logs/retrieve', {
-            params: {
-              userID: USER_ID,
-            },
-          })
-          .then(({ data }) => {
-            const timeLogs = data['time_logs'].sort((a, b) => b.date - a.date);
-            if (timeLogs.length > 0) {
-              chrome.storage.local.set({ totalTime: timeLogs[0]['time'] });
-            }
-          })
-          .catch((e) => console.log(e));
-      }
-      chrome.storage.local.set({ lastUsed: new Date() });
-    });
-
+    // This section of code determines if totalTime needs to be reset once it 
+    // enters in a new day.
+    axios
+      .get('/time-logs/retrieve', {
+        params: {
+          userID: USER_ID,
+        },
+      })
+      .then(({ data }) => {
+        const timeLogs = data['time_logs'].sort((a, b) => b.date - a.date);
+        if (timeLogs.length > 0) {
+          if (CompareTimestamps(timeLogs[0]['date'], Math.floor(Date.now() / 1000))) {
+            // Case where the latest time log has not been recorded in the latest
+            // day (i.e. today), reset total time to 0
+            chrome.storage.local.set({ totalTime: 0 });
+          } else {
+            // Update total time based on the time logs for today
+            chrome.storage.local.set({ totalTime: timeLogs[0]['time'] });
+          }
+        } else {
+          // Case where there are no time logs to be retrieved, set totalTime
+          // to 0
+          chrome.storage.local.set({ totalTime: 0 });
+        }
+      })
+      .catch((e) => console.log(e));
+    // This section of code sync and retrieve tasks and label information from 
+    // AWS.
     chrome.storage.local.get('currTasks', (payload) => {
       if (payload.currTasks.length > 0) {
         axios

@@ -19,7 +19,6 @@ const PastTaskTab = ({ pastTasks, labels, totalTime }) => {
           tab={PAST_TASK_TAB}
           totalTime={totalTime}
           showDate
-          showTime
         />
       )}
     </TabContainer>

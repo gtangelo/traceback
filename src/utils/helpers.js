@@ -103,3 +103,19 @@ export const SpliceArrayByDay = (arr) => {
   }
   return newArr;
 };
+
+// Compare two linux timestamp to see if they are in the same day or not. Returns
+// true if both timestamp occurs in the same day. Otherwise, false.
+export const CompareTimestamps = (timestamp1, timestamp2) => {
+  const time1 = new Date(0);
+  time1.setUTCSeconds(timestamp1);
+  time1.setHours(0, 0, 0, 0);
+  const time2 = new Date(0);
+  time2.setUTCSeconds(timestamp2);
+  time2.setHours(0, 0, 0, 0);
+  console.log('hi');
+  console.log(time1.getTime());
+  console.log(time2.getTime());
+  console.log('bye');
+  return time1.getTime() === time2.getTime();
+};
