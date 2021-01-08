@@ -1,6 +1,5 @@
 /* global chrome */
 import React, { useState } from 'react';
-import axios from 'axios';
 import './index.css';
 
 import { FaPlus } from 'react-icons/fa';

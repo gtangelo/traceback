@@ -44,18 +44,11 @@ const Popup = () => {
       .then(({ data }) => {
         const timeLogs = data['time_logs'].sort((a, b) => b.date - a.date);
         if (timeLogs.length > 0) {
-          if (CompareTimestamps(timeLogs[0]['date'], Math.floor(Date.now() / 1000))) {
+          if (!CompareTimestamps(timeLogs[0]['date'], Math.floor(Date.now() / 1000))) {
             // Case where the latest time log has not been recorded in the latest
             // day (i.e. today), reset total time to 0
             chrome.storage.local.set({ totalTime: 0 });
-          } else {
-            // Update total time based on the time logs for today
-            chrome.storage.local.set({ totalTime: timeLogs[0]['time'] });
           }
-        } else {
-          // Case where there are no time logs to be retrieved, set totalTime
-          // to 0
-          chrome.storage.local.set({ totalTime: 0 });
         }
       })
       .catch((e) => console.log(e));

@@ -113,9 +113,5 @@ export const CompareTimestamps = (timestamp1, timestamp2) => {
   const time2 = new Date(0);
   time2.setUTCSeconds(timestamp2);
   time2.setHours(0, 0, 0, 0);
-  console.log('hi');
-  console.log(time1.getTime());
-  console.log(time2.getTime());
-  console.log('bye');
   return time1.getTime() === time2.getTime();
 };

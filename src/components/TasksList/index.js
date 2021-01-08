@@ -23,11 +23,10 @@ const TasksList = ({
   showFinish,
   showDate,
 }) => {
-  
   const [timeLogs, setTimeLogs] = useState([]);
   const tasksDayList = SpliceArrayByDay(tasksList);
 
-  // useEffect for a single API call to retrieve the time logs from dynamodb 
+  // useEffect for a single API call to retrieve the time logs from dynamodb
   // database
   useEffect(() => {
     axios
@@ -41,42 +40,88 @@ const TasksList = ({
       })
       .catch((e) => console.log(e));
   }, []);
-  
+
   return (
     <div className='task-list-section'>
-      {timeLogs.map((timeLog) => (
+      {showDate && (
+        <div className='date-section'>
+          <SubHeading>Today</SubHeading>
+          <div>{ClockConverter(totalTime)}</div>
+        </div>
+      )}
+      {timeLogs.length === 0 ? (
         <>
-          {showDate && (
-            <div className='date-section'>
-              <SubHeading>{ConvertTimestampToDay(timeLog['date'])}</SubHeading>
-              {CompareTimestamps(timeLog['date']) ? (
-                <div>{ClockConverter(totalTime)}</div>
-              ) : (
-                <div>{ClockConverter(timeLog['time'])}</div>
-              )}
-            </div>
-          )}
           {tasksDayList.map((tasks, i) => (
             <div key={i}>
+              {showDate &&
+                !CompareTimestamps(
+                  tasks[0]['start'],
+                  Math.floor(Date.now() / 1000)
+                ) && (
+                <div className='date-section'>
+                  <SubHeading>
+                    {ConvertTimestampToDay(tasks[0]['start'])}
+                  </SubHeading>
+                  <div>Not recorded</div>
+                </div>
+              )}
               {tasks.map((task, i) => (
-                <>
-                  {CompareTimestamps(timeLog['date'], tasks[0]['start']) && (
-                    <TaskListItem
-                      task={task}
-                      labels={labels}
-                      tab={tab}
-                      showFinish={showFinish}
-                      showDelete={showDelete}
-                      setCurrTasks={setCurrTasks}
-                      setPastTasks={setPastTasks}
-                    />
-                  )}
-                </>
+                <TaskListItem
+                  task={task}
+                  labels={labels}
+                  tab={tab}
+                  showFinish={showFinish}
+                  showDelete={showDelete}
+                  setCurrTasks={setCurrTasks}
+                  setPastTasks={setPastTasks}
+                  key={i}
+                />
               ))}
             </div>
           ))}
         </>
-      ))}
+      ) : (
+        <>
+          {timeLogs.map((timeLog, i) => (
+            <div key={i}>
+              {showDate &&
+                !CompareTimestamps(
+                  timeLog['date'],
+                  Math.floor(Date.now() / 1000)
+                ) && (
+                <div className='date-section'>
+                  <SubHeading>
+                    {ConvertTimestampToDay(timeLog['date'])}
+                  </SubHeading>
+                  <div>{ClockConverter(timeLog['time'])}</div>
+                </div>
+              )}
+              {tasksDayList.map((tasks, i) => (
+                <div key={i}>
+                  {tasks.map((task, i) => (
+                    <div key={i}>
+                      {CompareTimestamps(
+                        timeLog['date'],
+                        tasks[0]['start']
+                      ) && (
+                        <TaskListItem
+                          task={task}
+                          labels={labels}
+                          tab={tab}
+                          showFinish={showFinish}
+                          showDelete={showDelete}
+                          setCurrTasks={setCurrTasks}
+                          setPastTasks={setPastTasks}
+                        />
+                      )}
+                    </div>
+                  ))}
+                </div>
+              ))}
+            </div>
+          ))}
+        </>
+      )}
     </div>
   );
 };
